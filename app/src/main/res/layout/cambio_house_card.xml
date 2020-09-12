@@ -1,0 +1,323 @@
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
+
+        <!-- A CardView that contains a TextView -->
+            <androidx.cardview.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cambio_house_card_view"
+            android:layout_gravity="left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            card_view:cardCornerRadius="4dp"
+                >
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="20dp"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:layout_gravity="left"
+
+                    >
+
+
+                    <!-- LOGO -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="3dp"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="100"
+
+                            >
+
+                            <ImageView
+                                android:id="@+id/cambio_house_bankLogo"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="left"
+                                android:layout_margin="5dp"
+                                />
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:orientation="vertical"
+
+                                >
+                                <TextView
+                                    android:id="@+id/cambio_house_bankName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="left"
+                                    android:textSize="20dp"
+                                    android:textAlignment="center"
+                                    android:textStyle="bold"
+                                    />
+
+                                <TextView
+                                    android:id="@+id/cambio_house_bankFullName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="left"
+                                    android:textSize="12dp"
+                                    android:textAlignment="center"
+                                    />
+                            </LinearLayout>
+
+
+
+                        </LinearLayout>
+
+                        <!-- Ranking Position -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+
+                            >
+
+                            <TextView
+                                android:id="@+id/cambio_house_position"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:textSize="30dp"
+                                android:textStyle="bold"
+                                android:textAlignment="center"
+                                android:layout_marginRight="20dp"
+                                />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- DATE -->
+                    <TextView
+                        android:id="@+id/cambio_house_refDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="5dp"
+                        />
+
+
+                    <!-- USD and EUR Values -->
+
+                 <LinearLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:orientation="horizontal"
+                     android:paddingLeft="50dp"
+                     android:paddingRight="50dp"
+
+                     >
+
+                     <LinearLayout
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:orientation="vertical"
+                         android:layout_weight="1"
+                         >
+
+
+
+                             <ImageView
+                                 android:layout_width="36dp"
+                                 android:layout_height="36dp"
+                                 android:id="@+id/cambio_house_usdImg"
+                                 android:src="@drawable/dolar"
+                                 android:layout_gravity="left"
+                                 />
+
+
+
+                             <TextView
+                                 android:id="@+id/cambio_house_usdValue"
+                                 android:layout_width="wrap_content"
+                                 android:layout_height="wrap_content"
+                                 android:textStyle="bold"
+                                 android:textColor="@color/dolarGreen"
+                                 android:textSize="@dimen/textBig22Size"
+                                 android:fontFamily="sans-serif-light"
+                                 android:layout_gravity="left"
+                                 />
+
+
+                         <!-- Badge for Changing Rate -->
+                         <LinearLayout
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:layout_gravity="left">
+
+                             <TextView
+                                 android:id="@+id/cambio_house_badgeUsdValue"
+                                 android:layout_width="wrap_content"
+                                 android:layout_height="wrap_content"
+                                 android:textStyle="bold"
+                                 android:textSize="14dp"
+                                 android:paddingTop="5dp"
+                                 />
+
+                             <ImageView
+                                 android:layout_width="20dp"
+                                 android:layout_height="20dp"
+                                 android:layout_gravity="left"
+                                 android:id="@+id/cambio_house_usdArrow"
+                                 />
+
+                         </LinearLayout>
+
+                         <TextView
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:textSize="12dp"
+                             android:textColor="@color/darkolivegreen"
+                             android:layout_gravity="left"
+                             android:id="@+id/cambio_house_prevUsdValue"
+                             android:text="@string/valor_anterior_450"
+
+                             />
+
+                     </LinearLayout>
+
+                     <LinearLayout
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:orientation="vertical"
+                         android:layout_weight="1"
+
+                         >
+                         <ImageView
+                             android:layout_width="36dp"
+                             android:layout_height="36dp"
+                             android:src="@drawable/euro"
+                             android:layout_gravity="right"
+
+                             />
+
+
+                         <TextView
+                             android:id="@+id/cambio_house_euroValue"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:layout_gravity="right"
+                             android:textStyle="bold"
+                             android:textColor="@color/euroBlue"
+                             android:textSize="@dimen/textBig22Size"
+                             android:fontFamily="sans-serif-light"
+
+                             />
+
+                         <!-- Badge for Changing Rate -->
+                         <LinearLayout
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:layout_gravity="right">
+                             <ImageView
+                                 android:layout_width="20dp"
+                                 android:layout_height="20dp"
+                                 android:layout_gravity="left"
+                                 android:id="@+id/cambio_house_euroArrow"
+                                 />
+                             <TextView
+                                 android:id="@+id/cambio_house_badgeEuroValue"
+                                 android:layout_width="wrap_content"
+                                 android:layout_height="wrap_content"
+                                 android:textStyle="bold"
+                                 android:textSize="14dp"
+                                 android:paddingTop="5dp"
+                                 />
+                         </LinearLayout>
+
+                         <TextView
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"
+                             android:textSize="12dp"
+                             android:textColor="@color/darkslateblue"
+                             android:layout_gravity="right"
+                             android:id="@+id/cambio_house_prevEuroValue"
+                             android:text="@string/valor_anterior_450"
+
+                             />
+
+
+
+
+                     </LinearLayout>
+
+                 </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/textMed14Size"
+
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/cambio_house_address"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:lines="1"
+                            >
+
+                        </TextView>
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/cambio_house_telephone"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:lines="1"
+                            >
+                        </TextView>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/cambio_house_email"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:lines="1"
+
+                            >
+
+                        </TextView>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+    </LinearLayout>

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ConverterFragment">
+
+
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fontFamily="serif-monospace"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="100dp"
+        android:gravity="top"
+        android:id="@+id/converter_layout"
+
+        >
+
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/share_conversion_btn"
+            android:layout_gravity="right"
+            android:background="@drawable/ic_share_24p"
+
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/moeda_a_converter"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:layout_gravity="left"
+            />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/currency_from_options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            >
+            <Button
+                android:id="@+id/ic_from_dolar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dolar"
+                style="?attr/materialButtonOutlinedStyle"
+                />
+            <Button
+                android:id="@+id/ic_from_euro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/euro"
+                style="?attr/materialButtonOutlinedStyle"
+                />
+            <Button
+                android:id="@+id/ic_from_kwanza"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/kwanza"
+                style="?attr/materialButtonOutlinedStyle"
+                />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/valor_a_converter"
+            android:textSize="5dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/input_amount"
+                android:layout_marginBottom="40dp"
+                android:background="@drawable/boarder_bottom_line"
+                android:singleLine="true"
+                android:inputType="number"
+                android:textStyle="bold"
+                android:imeOptions="actionDone"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/moeda_convertida"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/currency_to_options"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            android:layout_marginBottom="10dp"
+            >
+            <Button
+                android:id="@+id/ic_to_dolar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dolar"
+                style="?attr/materialButtonOutlinedStyle"
+                />
+            <Button
+                android:id="@+id/ic_to_euro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/euro"
+                style="?attr/materialButtonOutlinedStyle"
+                />
+            <Button
+                android:id="@+id/ic_to_kwanza"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/kwanza"
+                style="?attr/materialButtonOutlinedStyle"
+                />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <!--
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/output_currency"
+            android:layout_marginBottom="20dp"
+            android:padding="1dp"
+            >
+
+        </Spinner>
+        -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/c_mbio_mercado_informal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/euroBlue"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/output_informal_amount"
+            android:background="@drawable/boarder_bottom_line"
+            android:layout_marginBottom="20dp"
+            android:padding="10dp"
+            android:text="0.00"
+            android:singleLine="true"
+            android:textColor="@color/euroBlue"
+            android:textStyle="bold"
+            android:fontFamily="serif-monospace"
+            android:textSize="@dimen/textBig24Size"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/c_mbio_banca_comercial"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+
+            />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/output_comercial_amount_by_bank"
+                android:background="@drawable/boarder_bottom_line"
+                android:padding="10dp"
+                android:text="0.00"
+                android:singleLine="true"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                android:fontFamily="serif-monospace"
+                android:textSize="@dimen/textBig24Size"
+                />
+
+
+            <NumberPicker
+                android:theme="@style/NumberPickerText"
+                android:id="@+id/np"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                />
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/c_mbio_m_dio_banca_comercial"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/output_comercial_amount"
+            android:background="@drawable/boarder_bottom_line"
+            android:layout_marginBottom="20dp"
+            android:padding="10dp"
+            android:text="0.00"
+            android:singleLine="true"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:fontFamily="serif-monospace"
+            android:textSize="@dimen/textBig24Size"
+            />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/aviso"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorAccent"
+            />
+
+
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
+
+
+
+</FrameLayout>

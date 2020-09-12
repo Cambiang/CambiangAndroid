@@ -1,0 +1,133 @@
+<resources>
+    <string name="app_name"> Cambiang</string>
+
+
+    <string-array name="currency_choices">
+        <item>Dolar</item>
+        <item>Euro</item>
+        <item>Kwanza</item>
+    </string-array>
+
+    <string-array name="currency_choices_usd">
+        <item>Dolar</item>
+        <item>Kwanza</item>
+    </string-array>
+
+    <string-array name="currency_choices_kz_usd">
+        <item>Kwanza</item>
+        <item>Dolar</item>
+    </string-array>
+
+    <string-array name="currency_choices_euro">
+        <item>Euro</item>
+        <item>Kwanza</item>
+    </string-array>
+
+    <string-array name="currency_choices_kz_euro">
+        <item>Kwanza</item>
+        <item>Euro</item>
+    </string-array>
+
+    <string-array name="currency_choices_usd_euro">
+        <item>Dolar</item>
+        <item>Euro</item>
+    </string-array>
+
+    <string-array name="currency_choices_kz">
+        <item>Kwanza</item>
+    </string-array>
+
+    <string-array name="cambio_type_choices">
+        <item>Venda</item>
+        <item>Compra</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_simulator">Simulator</string>
+    <string name="valor_anterior_450">Valor anterior:</string>
+    <string name="valor_anterior_500">Valor anterior:</string>
+    <string name="information">Sobre a App</string>
+    <string name="information_text"> Informar-lhe sobre a dinâmica do câmbio em Angola é o nosso objectivo.
+        \n\n Fornecemos actualizações sobre as variações do câmbio no mercado paralelo, da banca comercial e da central.
+        \n\n Salientamos as principais diferênças entre estes três sectores bem como a evolução do cambio médio.
+        \n\n Assim, ajudamos os nossos usuários a tomarem melhores decisões financeiras, tais como quando e onde adquirir divisas baseado no valor real do câmbio.
+        \n\n O Cambiang é o câmbio de Angola!
+        \n\n O seu feedback é importante, interaja connosco através dos seguintes contactos:</string>
+    <string name="information_email">ccambiang@gmail.com</string>
+    <string name="information_website">website: cambiang.com</string>
+    <string name="cambioOption">Câmbio</string>
+    <string name="conversorOption">Conversor</string>
+    <string name="simulationOption">Simulador</string>
+    <string name="newsOption">News</string>
+    <string name="best_c_mbio">Best Câmbio</string>
+    <string name="estat_sticas">Estatísticas</string>
+    <string name="sobre_a_app">Sobre a App</string>
+    <string name="moeda_a_converter">De (moeda a converter):</string>
+    <string name="dolar">Dolar</string>
+    <string name="euro">Euro</string>
+    <string name="kwanza">Kwanza</string>
+    <string name="valor_a_converter">Valor a Converter</string>
+    <string name="moeda_convertida">Para (moeda convertida):</string>
+    <string name="c_mbio_mercado_informal">CÂMBIO MERCADO INFORMAL</string>
+    <string name="c_mbio_banca_comercial">CÂMBIO BANCA COMERCIAL</string>
+    <string name="c_mbio_m_dio_banca_comercial">CÂMBIO MÉDIO BANCA COMERCIAL</string>
+    <string name="aviso">Não inclui custos de serviços/IVA cobrados pelo banco</string>
+    <string name="defina_o_seu_pr_prio_c_mbio">Defina o seu próprio câmbio:</string>
+    <string name="minha_quantia">Minha Quantia</string>
+    <string name="quantia_equivalente_em_kwanza">Quantia equivalente em Kwanza</string>
+    <string name="de_moeda_a_converter">De (moeda a converter):</string>
+    <string name="valor_equivalente_simulado">VALOR EQUIVALENTE SIMULADO</string>
+    <string name="juros">Juros</string>
+    <string name="partilhar">Partilhar</string>
+    <string name="taxa_juros">Taxas de Juro</string>
+    <string name="juros_explanation_part_1">Por exemplo, se fizesse hoje uma aplicação à prazo no valor de 100 mil kwanzas no</string>
+    <string name="juros_explanation_part_2">, dependentemente do tipo de aplicação que terá feito,</string>
+    <string name="juros_explanation_part_3">deverá ganhar em juros o seguinte:</string>
+    <string name="juros_explanation_part_gain">Um ganho no valor de:</string>
+    <string name="juros_explanation_part_total">Total Acumulado:</string>
+    <string name="juros_explanation_part_deadline30">No prazo de 30 dias</string>
+    <string name="juros_explanation_part_deadline90">No prazo de 90 dias</string>
+    <string name="juros_explanation_part_deadline360">No prazo de 360 dias</string>
+    <string name="dep_sitos_prazo_dias">Depósitos à prazo (dias)</string>
+    <string name="taxa_de_juro">Taxa de Juro</string>
+    <string name="como_que_funciona">COMO É QUE FUNCIONA?</string>
+    <string name="anuncios">Saber Mais</string>
+    <string name="casas_de_c_mbio">Casas de Câmbio</string>
+    <string name="irt_calculator">IRT Calculadora</string>
+    <string name="More">Mais</string>
+    <string name="trabalho_por_conta_pr_pria">Trabalho por Conta Própria</string>
+    <string name="sal_rio_de_base">Salário de Base</string>
+    <string name="subs_dios_total">Subsídios [Total]</string>
+    <string name="banks_list">Lista de Bancos</string>
+
+    <string-array name="banksNames">
+        <item>ATL</item>
+        <item>BAI</item>
+        <item>BCA</item>
+        <item>BCGA</item>
+        <item>BCI</item>
+        <item>BCS</item>
+        <item>BDA</item>
+        <item>BE</item>
+        <item>BFA</item>
+        <item>BIC</item>
+        <item>BIR</item>
+        <item>BMF</item>
+        <item>BNI</item>
+        <item>BOCLB</item>
+        <item>BPC</item>
+        <item>BPG</item>
+        <item>BVB</item>
+        <item>FNB</item>
+        <item>BKEVE</item>
+        <item>SBA</item>
+        <item>SCBA</item>
+        <item>BSOL</item>
+        <item>VTB</item>
+        <item>Yetu</item>
+
+    </string-array>
+
+
+</resources>

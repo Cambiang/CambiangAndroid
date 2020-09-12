@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#509ee0</color>
+    <color name="colorPrimaryDark">#509ecf</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorOrange">#FFA500</color>
+    <color name="dolarGreen">#50ab3e</color>
+    <color name="euroBlue">#2275b6</color>
+    <color name="darkolivegreen">#556b2f</color>
+    <color name="darkslateblue">#483d8b</color>
+    <color name="sky">#87ceeb</color>
+    <color name="mtrl_btn_stroke_color_selector">#509ee0</color>
+    <color name="ghostwhite">#F8F8FF</color>
+    <color name="snow">#FFFAFA</color>
+    <color name="whitesmoke">#F5F5F5</color>
+    <color name="floralwhite">#FFFAF0</color>
+    <color name="mintcream">#F5FFFA</color>
+    <color name="azure">#F0FFFF</color>
+
+
+</resources>

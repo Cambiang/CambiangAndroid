@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SimulatorFragment">
+
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="100dp"
+        android:background="@color/ghostwhite"
+        >
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/defina_o_seu_pr_prio_c_mbio"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boarder_bottom_line"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/input_currency_rate_simul"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:padding="1dp"
+                android:layout_gravity="center"
+                android:background="@drawable/boarder_simulator"
+                android:gravity="center"
+                android:spinnerMode="dropdown"
+                >
+            </Spinner>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow_drop_down_black_24dp"
+                />
+
+        </RelativeLayout>
+
+
+        <!--
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/input_amount_usd_euro_simulxx"
+            android:background="@drawable/boarder_simulator"
+            android:layout_marginBottom="20dp"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:inputType="number"
+            android:textStyle="bold"
+            android:imeOptions="actionDone"
+            />
+            -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/minha_quantia"
+            android:textSize="5dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/input_amount_usd_euro_simul"
+                android:layout_marginBottom="40dp"
+                android:background="@drawable/boarder_bottom_line"
+                android:singleLine="true"
+                android:inputType="number"
+                android:textStyle="bold"
+                android:imeOptions="actionDone"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/textMed18Size"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!--
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:text="Quantia equivalente em Kwanza"
+                   android:layout_marginBottom="10dp"
+                   android:textStyle="bold"
+                   android:textColor="@color/colorPrimary"
+                   />
+
+               <EditText
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/input_amount_kz_rate"
+                   android:background="@drawable/boarder_simulator"
+                   android:layout_marginBottom="40dp"
+                   android:padding="10dp"
+                   android:singleLine="true"
+                   android:inputType="number"
+                   android:textStyle="bold"
+                   android:imeOptions="actionDone"
+
+                   />
+
+                   -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/quantia_equivalente_em_kwanza"
+            android:textSize="5dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/input_amount_kz_rate"
+                android:layout_marginBottom="40dp"
+                android:background="@drawable/boarder_bottom_line"
+                android:singleLine="true"
+                android:inputType="number"
+                android:textStyle="bold"
+                android:imeOptions="actionDone"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/textMed18Size"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <!--*************** NORMAL CONVERTER AS BEFORE ************** -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/de_moeda_a_converter"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boarder_bottom_line"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/input_currency_simul"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:padding="1dp"
+                android:layout_gravity="center"
+                android:background="@drawable/boarder_simulator"
+                android:gravity="center"
+                android:spinnerMode="dropdown"
+                >
+
+            </Spinner>
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow_drop_down_black_24dp"
+                />
+
+        </RelativeLayout>
+
+        <!--
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/input_amount_simul"
+            android:background="@drawable/boarder_simulator"
+            android:layout_marginBottom="40dp"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:inputType="number"
+            android:textStyle="bold"
+            android:imeOptions="actionDone"
+            />
+
+        -->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/valor_a_converter"
+            android:textSize="5dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/input_amount_simul"
+                android:layout_marginBottom="40dp"
+                android:background="@drawable/boarder_bottom_line"
+                android:singleLine="true"
+                android:inputType="number"
+                android:textStyle="bold"
+                android:imeOptions="actionDone"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/textMed18Size"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/moeda_convertida"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+
+
+            />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boarder_bottom_line"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/output_currency_simul"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:padding="1dp"
+                android:layout_gravity="center"
+                android:background="@drawable/boarder_simulator"
+                android:gravity="center"
+                android:spinnerMode="dropdown"
+                >
+            </Spinner>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow_drop_down_black_24dp"
+                />
+
+        </RelativeLayout>
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/valor_equivalente_simulado"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            />
+
+ <!--
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/output_informal_amount_simul"
+            android:background="@drawable/boarder_simulator"
+            android:layout_marginBottom="50dp"
+            android:padding="10dp"
+            android:text="0.00"
+            android:singleLine="true"
+            android:textColor="#e40f45"
+            android:textStyle="bold"
+            />
+
+       -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/output_informal_amount_simul"
+            android:background="@drawable/boarder_bottom_line"
+            android:layout_marginBottom="20dp"
+            android:padding="10dp"
+            android:text="0.00"
+            android:singleLine="true"
+            android:textColor="@color/euroBlue"
+            android:textStyle="bold"
+            android:fontFamily="serif-monospace"
+            android:textSize="@dimen/textBig24Size"
+            />
+
+
+    </LinearLayout>
+
+
+
+
+</androidx.core.widget.NestedScrollView>
+
+
+</FrameLayout>

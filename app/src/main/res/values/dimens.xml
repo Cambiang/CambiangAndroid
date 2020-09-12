@@ -1,0 +1,13 @@
+<resources>
+    <dimen name="fab_margin">24dp</dimen>
+    <dimen name="textMedSize">16dp</dimen>
+    <dimen name="textMed18Size">18dp</dimen>
+    <dimen name="textMed14Size">14dp</dimen>
+    <dimen name="textBig20Size">20dp</dimen>
+    <dimen name="textBig22Size">22sp</dimen>
+    <dimen name="textBig24Size">24sp</dimen>
+    <dimen name="mtrl_btn_stroke_size">2dp</dimen>
+    <dimen name="tall_toolbar_height">56dp</dimen>
+
+
+</resources>

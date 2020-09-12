@@ -1,0 +1,37 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- "Mark Favorite", should appear as action button if possible -->
+
+    <item
+        android:id="@+id/action_ranking"
+        android:title="@string/best_c_mbio"
+        android:icon="@drawable/ic_info_black_24dp"
+        app:showAsAction="ifRoom"
+
+    />
+
+    <item
+        android:id="@+id/action_statistics"
+        android:title="@string/estat_sticas"
+        app:showAsAction="never"
+    />
+
+    <item
+        android:id="@+id/action_show_ads"
+        android:title="@string/anuncios"
+        app:showAsAction="never"/>
+
+
+    <item
+        android:id="@+id/action_show_cambio_houses"
+        android:title="@string/casas_de_c_mbio"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_info"
+        android:title="@string/sobre_a_app"
+        app:showAsAction="never"/>
+
+
+ </menu>

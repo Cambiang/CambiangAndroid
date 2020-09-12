@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "838429939666",
+    "firebase_url": "https://cambiang.firebaseio.com",
+    "project_id": "cambiang",
+    "storage_bucket": "cambiang.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:838429939666:android:2eec62ea57d62606",
+        "android_client_info": {
+          "package_name": "com.cambiang.cambiang"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "838429939666-12cmfskuj2sm4hdil36nkbrifbrm97s1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cambiang.cambiang",
+            "certificate_hash": "c83f87d20cb3099972d15096dad9b40a090f2200"
+          }
+        },
+        {
+          "client_id": "838429939666-67quv3ha3mka8c0dt9nt3lb34fbkrfb9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaUM8M1JltdxWsZaw_jO6pLAWjPSvksFw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "838429939666-67quv3ha3mka8c0dt9nt3lb34fbkrfb9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "838429939666-p59u2g7lfassqgmuo5p8vfhdl3oj0q95.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "Cambiang.Cambiang",
+                "app_store_id": "1472229549"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

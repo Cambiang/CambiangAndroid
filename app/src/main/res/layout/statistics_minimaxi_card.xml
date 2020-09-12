@@ -1,0 +1,227 @@
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
+
+        <!-- A CardView that contains a TextView -->
+            <androidx.cardview.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view_statistics"
+            android:layout_gravity="left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            card_view:cardCornerRadius="4dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="20dp"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:layout_gravity="left"
+                    >
+
+
+                    <!-- LOGO -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="3dp"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="100"
+
+                            >
+
+                            <ImageView
+                                android:id="@+id/staticisBankLogo"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="left"
+                                android:layout_margin="5dp"
+                                />
+
+
+
+                            <TextView
+                                android:id="@+id/statisticsBankName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:textSize="20dp"
+                                android:textAlignment="center"
+                                android:textStyle="bold"
+                                />
+
+                        </LinearLayout>
+
+                        <!-- Cambio Type spinner -->
+                        <!--    <LinearLayout
+                               android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:layout_gravity="right"
+                               android:layout_weight="1"
+                               >
+
+                               <Spinner
+                                   android:id="@+id/type_cambio"
+                                   android:layout_width="match_parent"
+                                   android:layout_height="wrap_content"
+                                   android:layout_marginBottom="10dp"
+                                   android:padding="1dp"
+                                   >
+
+                               </Spinner>
+
+                           </LinearLayout> -->
+
+
+                       </LinearLayout>
+
+                       <!-- DATE -->
+                     <TextView
+                         android:id="@+id/statisticsRefDate"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_gravity="center_horizontal"
+                         android:layout_marginTop="3dp"
+                         android:layout_marginBottom="5dp"
+                         android:textColor="@color/euroBlue"/>
+
+
+                     <!-- Table with Data -->
+                    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:rowCount="4"
+                        android:columnCount="3"
+                        android:stretchColumns="1"
+                        android:padding="5dp"
+                        android:background="@drawable/boarder"
+
+                        >
+                        <TableRow
+                            android:id="@+id/statisticsRowHeader"
+                            android:background="@drawable/boarder_bottom_line"
+                            android:layout_marginBottom="10dp">
+
+                            <TextView
+                                android:text="Indicador"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="@dimen/textMedSize"
+                                android:textStyle="bold"
+                                android:ellipsize="end"
+
+
+                                />
+                            <TextView
+                                android:text="Dolar"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="@dimen/textMedSize"
+                                android:textStyle="bold"
+                                android:ellipsize="end"
+                                />
+                            <TextView
+                                android:text="Euro"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorWhite"
+                                android:textSize="@dimen/textMedSize"
+                                android:textStyle="bold"
+                                android:ellipsize="end"
+                                />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_marginBottom="10dp">
+
+                            <TextView
+                                android:text="Mínimo"
+                                android:layout_gravity="left"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="@dimen/textMed14Size"
+                                android:textStyle="bold"
+                                android:ellipsize="end"
+                                />
+                            <TextView
+                                android:id="@+id/minUSD"
+                                android:text="Dolar"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorBlack" />
+                            <TextView
+                                android:id="@+id/minEUR"
+                                android:text="Euro"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorBlack" />
+
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_marginBottom="10dp">
+
+                            <TextView
+                                android:text="Médio"
+                                android:layout_gravity="left"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="@dimen/textMed14Size"
+                                android:textStyle="bold"
+                                android:ellipsize="end"/>
+                            <TextView
+                                android:id="@+id/medUSD"
+                                android:text="Dolar"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorBlack" />
+                            <TextView
+                                android:id="@+id/medEUR"
+                                android:text="Euro"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorBlack" />
+
+                        </TableRow>
+
+                        <TableRow>
+
+                            <TextView
+                                android:text="Máximo"
+                                android:layout_gravity="left"
+                                android:textColor="@color/colorBlack"
+                                android:textSize="@dimen/textMed14Size"
+                                android:textStyle="bold"
+                                android:ellipsize="end"/>
+                            <TextView
+                                android:id="@+id/maxUSD"
+                                android:text="Dolar"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorBlack" />
+                            <TextView
+                                android:id="@+id/maxEUR"
+                                android:text="Euro"
+                                android:textAlignment="center"
+                                android:textColor="@color/colorBlack" />
+
+                        </TableRow>
+
+                    </TableLayout>
+
+
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+    </LinearLayout>

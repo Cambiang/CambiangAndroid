@@ -1,0 +1,135 @@
+<resources>
+    <string name="app_name"> Cambiang</string>
+
+
+    <string-array name="currency_choices">
+        <item>USD</item>
+        <item>EUR</item>
+        <item>AKZ</item>
+    </string-array>
+
+    <string-array name="currency_choices_usd">
+        <item>USD</item>
+        <item>AKZ</item>
+    </string-array>
+
+    <string-array name="currency_choices_kz_usd">
+        <item>AKZ</item>
+        <item>USD</item>
+    </string-array>
+
+    <string-array name="currency_choices_euro">
+        <item>EUR</item>
+        <item>AKZ</item>
+    </string-array>
+
+    <string-array name="currency_choices_kz_euro">
+        <item>AKZ</item>
+        <item>EUR</item>
+    </string-array>
+
+    <string-array name="currency_choices_usd_euro">
+        <item>USD</item>
+        <item>EUR</item>
+    </string-array>
+
+    <string-array name="currency_choices_kz">
+        <item>AKZ</item>
+    </string-array>
+
+    <string-array name="cambio_type_choices">
+        <item>Venda</item>
+        <item>Compra</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_simulator">Simulateur</string>
+    <string name="valor_anterior_450">Valeur précéd.:</string>
+    <string name="valor_anterior_500">Valeur précéd.:</string>
+    <string name="information">Information</string>
+    <string name="information_text"> Vous informer sur le taux de change autorisé en Angola est notre objectif.
+                                   \n\n Nous fournissons des mises à jour sur les variations des taux de change sur le marché parallèle, les banques commerciales et centrales.
+                                   \n\n Nous mettons en évidence les principales différences entre ces trois secteurs ainsi que l\'évolution du taux de change moyen.
+                                   \n\n Ainsi, nous aidons nos utilisateurs à prendre de meilleures décisions financières, comme quand et où acquérir des devises en fonction du taux de change réel.
+                                    \n\n Cambiang est la monnaie de l\'Angola!
+                                    \n Vos commentaires sont importants, interagissez avec nous via les contacts suivants:
+    </string>
+    <string name="information_email">ccambiang@gmail.com</string>
+    <string name="information_website">website: cambiang.com</string>
+    <string name="cambioOption">Échange</string>
+    <string name="conversorOption">Convert.</string>
+    <string name="simulationOption">Simulateur</string>
+    <string name="newsOption">News</string>
+    <string name="best_c_mbio">Best Échange</string>
+    <string name="estat_sticas">Statistiques</string>
+    <string name="sobre_a_app">App Info </string>
+    <string name="moeda_a_converter">De (devise à convertir):</string>
+    <string name="dolar">USD</string>
+    <string name="euro">EUR</string>
+    <string name="kwanza">AKZ</string>
+    <string name="valor_a_converter">Montant à convertir</string>
+    <string name="moeda_convertida">À (devise convertie):</string>
+    <string name="c_mbio_mercado_informal"> TAUX DE CHANGE DE MARCHÉ INFORMEL</string>
+    <string name="c_mbio_banca_comercial">TAUX DE CHANGE DE LA BANQUE COMMERCIALE</string>
+    <string name="c_mbio_m_dio_banca_comercial">TAUX DE CHANGE MOYEN BANQUE COMMERCIALE</string>
+    <string name="aviso">Ne comprend pas le service bancaire / les frais de TVA</string>
+    <string name="defina_o_seu_pr_prio_c_mbio">Définissez votre propre taux de change:</string>
+    <string name="minha_quantia">Mon montant</string>
+    <string name="quantia_equivalente_em_kwanza">Montant équivalent en Kwanza</string>
+    <string name="de_moeda_a_converter">De (devise à convertir):</string>
+    <string name="valor_equivalente_simulado">MONTANT ÉQUIVALENT SIMULÉ</string>
+    <string name="juros">Intérêt</string>
+    <string name="partilhar">Partager</string>
+    <string name="taxa_juros">Taux d\'intérêt</string>
+    <string name="juros_explanation_part_1">Par exemple, si aujourd\'hui vous avez investi 100 000 kwanzas dans le</string>
+    <string name="juros_explanation_part_2">, selon le type d\'investissement que vous avez fait,</string>
+    <string name="juros_explanation_part_3">vous devriez gagner en intérêts ce qui suit:</string>
+    <string name="juros_explanation_part_gain">Un gain de:</string>
+    <string name="juros_explanation_part_total">Total accumulé:</string>
+    <string name="juros_explanation_part_deadline30">Dans les 30 jours</string>
+    <string name="juros_explanation_part_deadline90">Dans les 90 jours</string>
+    <string name="juros_explanation_part_deadline360">Dans les 360 jours</string>
+    <string name="dep_sitos_prazo_dias">Term deposits (days)</string>
+    <string name="taxa_de_juro">Taux d\'intérêt</string>
+    <string name="como_que_funciona">COMMENT ÇA MARCHE?</string>
+    <string name="anuncios">Savoir Plus</string>
+    <string name="casas_de_c_mbio">Bureau de Change</string>
+    <string name="irt_calculator">IRT Calculateur</string>
+    <string name="More">Plus</string>
+    <string name="trabalho_por_conta_pr_pria">Trabalho por Conta Própria</string>
+    <string name="sal_rio_de_base">Salário de Base</string>
+    <string name="subs_dios_total">Subsídios [Total]</string>
+    <string name="banks_list">Liste de Banques</string>
+
+
+    <string-array name="banksNames">
+        <item>ATL</item>
+        <item>BAI</item>
+        <item>BCA</item>
+        <item>BCGA</item>
+        <item>BCI</item>
+        <item>BCS</item>
+        <item>BDA</item>
+        <item>BE</item>
+        <item>BFA</item>
+        <item>BIC</item>
+        <item>BIR</item>
+        <item>BMF</item>
+        <item>BNI</item>
+        <item>BOCLB</item>
+        <item>BPC</item>
+        <item>BPG</item>
+        <item>BVB</item>
+        <item>FNB</item>
+        <item>BKEVE</item>
+        <item>SBA</item>
+        <item>SCBA</item>
+        <item>BSOL</item>
+        <item>VTB</item>
+        <item>Yetu</item>
+
+    </string-array>
+
+
+</resources>

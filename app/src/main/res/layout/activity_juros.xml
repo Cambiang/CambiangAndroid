@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".JurosActivity">
+
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:elevation="8.0dp"
+        android:layout_marginTop="-17dp"
+        android:id="@+id/juros"
+        >
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+
+            >
+
+            <include
+                android:id="@+id/juros_tool_bar"
+                layout="@layout/tool_bar">
+            </include>
+
+
+
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/boarder_bottom_line">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:layout_gravity="left"
+
+                >
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_weight="100"
+
+                    >
+
+                    <ImageView
+                        android:id="@+id/jurosBankLogo"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="left"
+                        android:layout_margin="5dp"
+                        />
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:orientation="vertical"
+
+                        >
+                        <TextView
+                            android:id="@+id/jurosBankName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:textSize="20dp"
+                            android:textAlignment="center"
+                            android:textStyle="bold"
+                            />
+
+                        <TextView
+                            android:id="@+id/jurosBankFullName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:textSize="12dp"
+                            android:textAlignment="center"
+                            />
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+
+
+
+                <!-- DATE -->
+                <TextView
+                    android:id="@+id/jurosRefDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="5dp"
+                    android:textColor="@color/euroBlue"/>
+
+
+                <!-- Table with Data -->
+                <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:rowCount="4"
+                    android:columnCount="2"
+                    android:stretchColumns="1"
+                    android:padding="5dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@drawable/boarder"
+                    android:textSize="@dimen/textMedSize"
+                    android:textAlignment="center"
+                    android:id="@+id/table_juros"
+
+
+                    >
+                    <TableRow
+                        android:id="@+id/jurosRowHeader"
+                        android:layout_marginBottom="20dp"
+                        android:layout_gravity="center_horizontal">
+
+                        <TextView
+                            android:text="@string/dep_sitos_prazo_dias"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorWhite"
+                            android:textStyle="bold"
+                            android:ellipsize="end"
+                            android:textSize="@dimen/textMedSize"
+                            android:layout_gravity="center_horizontal"
+                            />
+                        <TextView
+                            android:text="@string/taxa_de_juro"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorWhite"
+                            android:textStyle="bold"
+                            android:ellipsize="end"
+                            android:textSize="@dimen/textMedSize"
+                            android:layout_gravity="center_horizontal"
+                            />
+
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/boarder"
+                        android:layout_gravity="center_horizontal"
+                        >
+
+                        <TextView
+                            android:text="30"
+                            android:textColor="@color/colorBlack"
+                            android:ellipsize="end"
+                            android:textSize="@dimen/textBig20Size"
+                            android:layout_gravity="center_horizontal"
+
+
+                            />
+                        <TextView
+                            android:id="@+id/juros_30_days"
+                            android:text="@string/dolar"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/textBig20Size"
+                            android:textStyle="bold"
+                            android:layout_gravity="center_horizontal"
+
+                            />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/boarder"
+                        android:layout_gravity="center_horizontal"
+                        >
+
+                        <TextView
+                            android:text="90"
+                            android:textColor="@color/colorBlack"
+                            android:ellipsize="end"
+                            android:textSize="@dimen/textBig20Size"
+                            android:layout_gravity="center_horizontal"
+                            />
+                        <TextView
+                            android:id="@+id/juros_90_days"
+                            android:text="@string/dolar"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/textBig20Size"
+                            android:textStyle="bold"
+                            android:layout_gravity="center_horizontal"
+
+
+                            />
+                    </TableRow>
+
+
+                    <TableRow
+                        android:layout_marginBottom="20dp"
+                        android:background="@drawable/boarder"
+                        >
+
+                        <TextView
+                            android:text="360"
+                            android:textColor="@color/colorBlack"
+                            android:ellipsize="end"
+                            android:textSize="@dimen/textBig20Size"
+                            android:layout_gravity="center_horizontal"
+
+                            />
+                        <TextView
+                            android:id="@+id/juros_360_days"
+                            android:text="@string/dolar"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="@dimen/textBig20Size"
+                            android:textStyle="bold"
+                            android:layout_gravity="center_horizontal"
+
+
+                            />
+                    </TableRow>
+                </TableLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginBottom="50dp"
+                    >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/textMedSize"
+                        android:textAlignment="center"
+                        android:textStyle="bold"
+                        android:text="@string/como_que_funciona"
+                        android:layout_marginTop="10dp"
+                        >
+
+                    </TextView>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/juros_explanation_1"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/textMedSize"
+
+                        >
+
+                    </TextView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/juros_explanation_4"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/textMedSize"
+                        android:textStyle="bold"
+                        android:layout_marginTop="5dp"
+                        >
+                    </TextView>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/juros_explanation_2"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/textMedSize"
+                        >
+
+                    </TextView>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/juros_explanation_3"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/textMedSize"
+                        android:textStyle="bold"
+                        >
+
+                    </TextView>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/juros_explanation_90_4"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/textMedSize"
+                        android:textStyle="bold"
+                        android:layout_marginTop="5dp"
+                        >
+                    </TextView>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/juros_explanation_90_2"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/textMedSize"
+                        >
+
+                    </TextView>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/juros_explanation_90_3"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/textMedSize"
+                        android:textStyle="bold"
+                        >
+
+                    </TextView>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/juros_explanation_360_4"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/textMedSize"
+                        android:textStyle="bold"
+                        android:layout_marginTop="5dp"
+                        >
+                    </TextView>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/juros_explanation_360_2"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/textMedSize"
+                        >
+
+                    </TextView>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/juros_explanation_360_3"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="@dimen/textMedSize"
+                        android:textStyle="bold"
+                        >
+
+                    </TextView>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
+
+</LinearLayout>
+
+

@@ -1,0 +1,134 @@
+<resources>
+    <string name="app_name"> Cambiang</string>
+
+
+    <string-array name="currency_choices">
+        <item>USD</item>
+        <item>EUR</item>
+        <item>AKZ</item>
+    </string-array>
+
+    <string-array name="currency_choices_usd">
+        <item>USD</item>
+        <item>AKZ</item>
+    </string-array>
+
+    <string-array name="currency_choices_kz_usd">
+        <item>AKZ</item>
+        <item>USD</item>
+    </string-array>
+
+    <string-array name="currency_choices_euro">
+        <item>EUR</item>
+        <item>AKZ</item>
+    </string-array>
+
+    <string-array name="currency_choices_kz_euro">
+        <item>AKZ</item>
+        <item>EUR</item>
+    </string-array>
+
+    <string-array name="currency_choices_usd_euro">
+        <item>USD</item>
+        <item>EUR</item>
+    </string-array>
+
+    <string-array name="currency_choices_kz">
+        <item>AKZ</item>
+    </string-array>
+
+    <string-array name="cambio_type_choices">
+        <item>Venda</item>
+        <item>Compra</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_simulator">Simulator</string>
+    <string name="valor_anterior_450">Previous value:</string>
+    <string name="valor_anterior_500">Previous value:</string>
+    <string name="information">Information</string>
+    <string name="information_text"> Informing you about the exchange rate practiced in Angola is our goal.
+        \n\n We provide updates on exchange rate variations in the parallel market, commercial and central banking.
+        \n\n We highlight the main differences between these three sectors as well as the evolution of the average exchange rate.
+        \n\n So, we help our users to make better financial decisions, such as when and where to acquire currency based on the real exchange rate.
+        \n\n Cambiang is the currency of Angola!
+        \n\n Your feedback is important, interact with us through the following contacts:</string>
+    <string name="information_email">ccambiang@gmail.com</string>
+    <string name="information_website">website: cambiang.com</string>
+    <string name="cambioOption">Exchange</string>
+    <string name="conversorOption">Convert.</string>
+    <string name="simulationOption">Simulator</string>
+    <string name="newsOption">News</string>
+    <string name="best_c_mbio">Best Exchange</string>
+    <string name="estat_sticas">Statistics</string>
+    <string name="sobre_a_app">About the App</string>
+    <string name="moeda_a_converter">From (currency to convert):</string>
+    <string name="dolar">USD</string>
+    <string name="euro">EUR</string>
+    <string name="kwanza">AKZ</string>
+    <string name="valor_a_converter">Amount to Convert</string>
+    <string name="moeda_convertida">To (converted currency):</string>
+    <string name="c_mbio_mercado_informal"> INFORMAL MARKET EXCHANGE RATE</string>
+    <string name="c_mbio_banca_comercial">COMERCIAL BANKS EXCHANGE RATE</string>
+    <string name="c_mbio_m_dio_banca_comercial">COMERCIAL BANKS AVERAGE EXCHANGE RATE</string>
+    <string name="aviso">Does not include bank service / VAT costs</string>
+    <string name="defina_o_seu_pr_prio_c_mbio">Set your own exchange rate:</string>
+    <string name="minha_quantia">My Amount</string>
+    <string name="quantia_equivalente_em_kwanza">Equivalent amount in Kwanza</string>
+    <string name="de_moeda_a_converter">From (currency to convert):</string>
+    <string name="valor_equivalente_simulado">SIMULATED EQUIVALENT AMOUNT</string>
+    <string name="juros">Interest</string>
+    <string name="partilhar">Share</string>
+    <string name="taxa_juros">Interest Rates</string>
+    <string name="juros_explanation_part_1">For example, if today you made an investment of 100 thousand kwanzas in the</string>
+    <string name="juros_explanation_part_2">, depending on the type of investment you’ve made,</string>
+    <string name="juros_explanation_part_3">you should earn in interest the following:</string>
+    <string name="juros_explanation_part_gain">A gain of:</string>
+    <string name="juros_explanation_part_total">Accumulated Total:</string>
+    <string name="juros_explanation_part_deadline30">Within 30 days</string>
+    <string name="juros_explanation_part_deadline90">Within 90 days</string>
+    <string name="juros_explanation_part_deadline360">Within 360 days</string>
+    <string name="dep_sitos_prazo_dias">Time deposits (days)</string>
+    <string name="taxa_de_juro">Interest Rate</string>
+    <string name="como_que_funciona">HOW DOES IT WORK?</string>
+    <string name="anuncios">Know More</string>
+    <string name="casas_de_c_mbio">Bureau de Change</string>
+    <string name="irt_calculator">IRT Calculator</string>
+    <string name="More">More</string>
+    <string name="trabalho_por_conta_pr_pria">Trabalho por Conta Própria</string>
+    <string name="sal_rio_de_base">Salário de Base</string>
+    <string name="subs_dios_total">Subsídios [Total]</string>
+    <string name="banks_list">Banks List</string>
+
+
+    <string-array name="banksNames">
+        <item>ATL</item>
+        <item>BAI</item>
+        <item>BCA</item>
+        <item>BCGA</item>
+        <item>BCI</item>
+        <item>BCS</item>
+        <item>BDA</item>
+        <item>BE</item>
+        <item>BFA</item>
+        <item>BIC</item>
+        <item>BIR</item>
+        <item>BMF</item>
+        <item>BNI</item>
+        <item>BOCLB</item>
+        <item>BPC</item>
+        <item>BPG</item>
+        <item>BVB</item>
+        <item>FNB</item>
+        <item>BKEVE</item>
+        <item>SBA</item>
+        <item>SCBA</item>
+        <item>BSOL</item>
+        <item>VTB</item>
+        <item>Yetu</item>
+
+    </string-array>
+
+
+</resources>
