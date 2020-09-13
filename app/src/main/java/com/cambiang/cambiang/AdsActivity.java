@@ -75,13 +75,17 @@ public class AdsActivity extends AppCompatActivity
 
         toolbar = (Toolbar) findViewById(R.id.ads_tool_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if(getSupportActionBar() != null)
+        {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        toolbar.setTitle(getResources().getString(R.string.anuncios));
-        toolbar.setTitleTextColor(Color.WHITE);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+            toolbar.setTitle(getResources().getString(R.string.anuncios));
+            toolbar.setTitleTextColor(Color.WHITE);
+        }
 
     }
 

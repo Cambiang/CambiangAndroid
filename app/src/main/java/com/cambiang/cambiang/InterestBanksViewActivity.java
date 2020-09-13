@@ -60,10 +60,7 @@ public class InterestBanksViewActivity extends AppCompatActivity
             //Clear the Intent After use it
             getIntent().removeExtra(this.KEY_EXTRA);
         }
-        else
-        {
-            //throw new IllegalArgumentException("Activity cannot find  extras " + this.KEY_EXTRA);
-        }
+
     }
 
     public void manager()
@@ -120,14 +117,19 @@ public class InterestBanksViewActivity extends AppCompatActivity
             {
                 String jsonAllowedbanksList = settings.getString(dataKey, "NOK");
 
-                if(!jsonAllowedbanksList.equals("NOK") && !jsonAllowedbanksList.isEmpty())
+                if(jsonAllowedbanksList != null)
                 {
-                    if(Arrays.asList(gson.fromJson(jsonAllowedbanksList, IrtTax[].class)) != null)
+                    if(!jsonAllowedbanksList.equals("NOK") && !jsonAllowedbanksList.isEmpty())
                     {
-                        allowedBanksList =  Arrays.asList(gson.fromJson(jsonAllowedbanksList, Bank[].class));
-                        ret = new ArrayList<>(allowedBanksList);
+                        if(Arrays.asList(gson.fromJson(jsonAllowedbanksList, IrtTax[].class)) != null)
+                        {
+                            allowedBanksList =  Arrays.asList(gson.fromJson(jsonAllowedbanksList, Bank[].class));
+                            ret = new ArrayList<>(allowedBanksList);
+                        }
                     }
                 }
+
+
             }
 
         }
@@ -154,13 +156,15 @@ public class InterestBanksViewActivity extends AppCompatActivity
 
         toolbar = (Toolbar) findViewById(R.id.interest_banks_tool_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        if(getSupportActionBar() != null)
+        {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        toolbar.setTitle(getString(R.string.banks_list));
-        toolbar.setTitleTextColor(Color.WHITE);
+            toolbar.setTitle(getString(R.string.banks_list));
+            toolbar.setTitleTextColor(Color.WHITE);
+        }
 
     }
 

@@ -38,10 +38,6 @@ public class SimulatorActivity extends AppCompatActivity
             //Clear the Intent After use it
             getIntent().removeExtra(this.KEY_EXTRA);
         }
-        else
-        {
-            //throw new IllegalArgumentException("Activity cannot find  extras " + this.KEY_EXTRA);
-        }
 
         try
         {
@@ -90,13 +86,18 @@ public class SimulatorActivity extends AppCompatActivity
 
         toolbar = (Toolbar) findViewById(R.id.simulator_tool_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if(getSupportActionBar() != null)
+        {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        toolbar.setTitle(getResources().getString(R.string.simulationOption));
-        toolbar.setTitleTextColor(Color.WHITE);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+            toolbar.setTitle(getResources().getString(R.string.simulationOption));
+            toolbar.setTitleTextColor(Color.WHITE);
+        }
+
 
     }
 

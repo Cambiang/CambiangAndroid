@@ -54,16 +54,16 @@ public class DailyCambioFragment extends Fragment {
     Intent newsNotificationIntent;
     Utilities utilities;
 
-    String kingUSD;
-    Double comercialBanksAvarageCambioUSD  = 0.0;
-    String kingEUR;
-    Double comercialBanksAvarageCambioEUR = 0.0 ;
-    Integer counter = 0;
+    private String kingUSD;
+    private Double comercialBanksAvarageCambioUSD  = 0.0;
+    private String kingEUR;
+    private Double comercialBanksAvarageCambioEUR = 0.0 ;
+    private Integer counter = 0;
 
     FirebaseDatabase database;
     DatabaseReference ref;
-    DatabaseReference ref2;
-    DatabaseReference ref3;
+    private DatabaseReference ref2;
+    private DatabaseReference ref3;
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -78,11 +78,11 @@ public class DailyCambioFragment extends Fragment {
     public static final String GOOGLE_TRACK_ID ="UA-132922035-1";
 
     public static final String PREFS_NAME = "cambiosLastUpdates";
-    public String ALLOWED_BANKS = "ALLOWED_BANKS";
+    private  String ALLOWED_BANKS = "ALLOWED_BANKS";
 
     Activity mainActivity = getActivity();
-    public ArrayList<Ad> adArrayList;
-    DatabaseReference refAd;
+    private  ArrayList<Ad> adArrayList;
+    private DatabaseReference refAd;
     SharedPreferences settings;
 
 
@@ -106,43 +106,44 @@ public class DailyCambioFragment extends Fragment {
     {
         super.onActivityCreated(saveInstanceState);
 
-        mContext = getActivity().getApplicationContext();
+        if(getActivity() != null) {
+            mContext = getActivity().getApplicationContext();
 
 
-        utilities = new Utilities();
+            utilities = new Utilities();
 
 
-        utilities.getDefaultTracker(getActivity().getApplicationContext()); //Analytics
+            utilities.getDefaultTracker(getActivity().getApplicationContext()); //Analytics
 
-        cambiosLastUpdate = new ArrayList<>(0);
-        cambiosPrevious = new ArrayList<Cambio>(0);
-        banksArray = new ArrayList<>();
-        adArrayList = new ArrayList<Ad>();
+            cambiosLastUpdate = new ArrayList<>(0);
+            cambiosPrevious = new ArrayList<Cambio>(0);
+            banksArray = new ArrayList<>();
+            adArrayList = new ArrayList<Ad>();
 
-        recyclerView = (RecyclerView)  getActivity().findViewById(R.id.cambiang_recycler_view);
-        recyclerView.setHasFixedSize(true);
+            recyclerView = (RecyclerView) getActivity().findViewById(R.id.cambiang_recycler_view);
+            recyclerView.setHasFixedSize(true);
 
-        //Layout Manager
-        layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
+            //Layout Manager
+            layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+            recyclerView.setLayoutManager(layoutManager);
 
-        registerForContextMenu(recyclerView);
-
-
-        settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
+            registerForContextMenu(recyclerView);
 
 
-        // Loading Data, show loading animation while loading...
-        utilities.loadingAnimation(View.VISIBLE,"chasingDots",getActivity(),R.id.spin_kit);
+            settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
 
 
-        // Write a message to the database
-        database = FirebaseDatabase.getInstance();
-        ref = database.getReference("CambiosLastUpdates");
-        ref2 = database.getReference("CambiosPreviousValues");
-        ref3 = database.getReference("Banks");
-        refAd = database.getReference("Ad");
-        //ref2 = database.getReference("CambiosPreviousValues");
+            // Loading Data, show loading animation while loading...
+            utilities.loadingAnimation(View.VISIBLE, "chasingDots", getActivity(), R.id.spin_kit);
+
+
+            // Write a message to the database
+            database = FirebaseDatabase.getInstance();
+            ref = database.getReference("CambiosLastUpdates");
+            ref2 = database.getReference("CambiosPreviousValues");
+            ref3 = database.getReference("Banks");
+            refAd = database.getReference("Ad");
+            //ref2 = database.getReference("CambiosPreviousValues");
 
 
             //Initialize and react in case of changes on the Cambio values
@@ -159,13 +160,13 @@ public class DailyCambioFragment extends Fragment {
             //Send first Analytics event before go to activity
             utilities.sendAnalyticsEvent("Arrival", "CambioView");
 
-
+        }
        // saveFirebaseToFile();
 
     }
 
 
-    public void initDisplay()
+    private void initDisplay()
     {
         if(cambiosLastUpdate.size() > 0 && banksArray.size() > 0)
         {
@@ -173,16 +174,20 @@ public class DailyCambioFragment extends Fragment {
             //cambiosLastUpdate, banksArray both arrays come from SharedPreferences stored data
             mAdapter = new DataAdapter(cambiosLastUpdate, banksArray);
             recyclerView.setAdapter(mAdapter);
-            utilities.loadingAnimation(View.GONE,"chasingDots",getActivity(),R.id.spin_kit);
-            //remove background
-            LinearLayout imgBackg = (LinearLayout) getActivity().findViewById(R.id.mybackg);
-            imgBackg.setVisibility(View.GONE);
+
+            if(getActivity() != null)
+            {
+                utilities.loadingAnimation(View.GONE,"chasingDots",getActivity(),R.id.spin_kit);
+                //remove background
+                LinearLayout imgBackg = (LinearLayout) getActivity().findViewById(R.id.mybackg);
+                imgBackg.setVisibility(View.GONE);
+            }
 
         }
     }
 
 
-    public void generalManager()
+    private void generalManager()
     {
         if(restoreSharedPreferences())
         {
@@ -194,7 +199,7 @@ public class DailyCambioFragment extends Fragment {
         }
     }
 
-    public void offlineManager()
+    private void offlineManager()
     {
 
         initDisplay();
@@ -250,14 +255,16 @@ public class DailyCambioFragment extends Fragment {
                                                 {
                                                     Bank bank = dataSnapshot.getValue(Bank.class);
 
-                                                    if(cambio.getBank().equals(bank.getName()))
+                                                    if(bank != null && cambio != null)
                                                     {
-                                                        addCambioList(cambio, bank);
+                                                        if(cambio.getBank().equals(bank.getName()))
+                                                        {
+                                                            addCambioList(cambio, bank);
 
-                                                        getCambiosValues(cambio);
+                                                            getCambiosValues(cambio);
 
+                                                        }
                                                     }
-
 
                                                 }
 
@@ -324,12 +331,13 @@ public class DailyCambioFragment extends Fragment {
                                                 {
                                                     Bank bank = dataSnapshot.getValue(Bank.class);
 
-                                                    if(cambio.getBank().equals(bank.getName()))
-                                                        updateList(cambio, bank);
-
+                                                    if(bank != null && cambio != null)
+                                                    {
+                                                        if(cambio.getBank().equals(bank.getName()))
+                                                            updateList(cambio, bank);
+                                                    }
 
                                                 }
-
 
                                             }catch (Exception e)
                                             {
@@ -387,7 +395,7 @@ public class DailyCambioFragment extends Fragment {
         );
     }
 
-    public void OrderCentralComercialInformalBanks()
+    private void OrderCentralComercialInformalBanks()
     {
 
         int BNAidx = -1;
@@ -416,9 +424,7 @@ public class DailyCambioFragment extends Fragment {
 
                 if(BNAidx != 0 && BNAidx != -1)
                 {
-                    Cambio elementSwapped = new Cambio();
-
-                    elementSwapped = this.cambiosLastUpdate.get(0);
+                    Cambio elementSwapped = this.cambiosLastUpdate.get(0);
 
                     //Copy BNA to the FIRST array position
                     this.cambiosLastUpdate.set(0, this.cambiosLastUpdate.get(BNAidx));
@@ -431,9 +437,7 @@ public class DailyCambioFragment extends Fragment {
 
                 if(KINGUILASidx != (this.cambiosLastUpdate.size()-1) && KINGUILASidx != -1)
                 {
-                    Cambio elementSwappedK = new Cambio();
-
-                    elementSwappedK = this.cambiosLastUpdate.get(this.cambiosLastUpdate.size()-1);
+                    Cambio elementSwappedK = this.cambiosLastUpdate.get(this.cambiosLastUpdate.size()-1);
 
                     //Copy KINGUILAS to the LAST array position
                     this.cambiosLastUpdate.set(this.cambiosLastUpdate.size()-1, this.cambiosLastUpdate.get(KINGUILASidx));
@@ -458,7 +462,7 @@ public class DailyCambioFragment extends Fragment {
 
     }
 
-    public void OrderBanks()
+    private void OrderBanks()
     {
 
         int BNAidx = -1;
@@ -494,9 +498,8 @@ public class DailyCambioFragment extends Fragment {
 
                 if(BNAidx != 0 && BNAidx != -1)
                 {
-                    Bank elementSwapped = new Bank();
 
-                    elementSwapped = this.banksArray.get(0);
+                    Bank elementSwapped = this.banksArray.get(0);
 
                     //Copy BNA to the FIRST array position
                     this.banksArray.set(0, this.banksArray.get(BNAidx));
@@ -509,9 +512,7 @@ public class DailyCambioFragment extends Fragment {
 
                 if(KINGUILASidx != (this.banksArray.size()-1) && KINGUILASidx != -1)
                 {
-                    Bank elementSwappedK = new Bank();
-
-                    elementSwappedK = this.banksArray.get(this.banksArray.size()-1);
+                    Bank elementSwappedK  = this.banksArray.get(this.banksArray.size()-1);
 
                     //Copy KINGUILAS to the LAST array position
                     this.banksArray.set(this.banksArray.size()-1, this.banksArray.get(KINGUILASidx));
@@ -537,7 +538,7 @@ public class DailyCambioFragment extends Fragment {
     }
 
 
-    public void addCambioList(final Cambio cambio, final Bank bank)
+    private void addCambioList(final Cambio cambio, final Bank bank)
     {
         ref2.addChildEventListener(
                 new ChildEventListener()
@@ -594,7 +595,7 @@ public class DailyCambioFragment extends Fragment {
     }
 
 
-    public void addAlsoChangingRate(Cambio cambio, Cambio cambioPrevious, Bank bank)
+    private void addAlsoChangingRate(Cambio cambio, Cambio cambioPrevious, Bank bank)
     {
        // Log.wtf("ChangingRate", cambio.getBank() + "--" + cambioPrevious.getBank());
 
@@ -730,11 +731,14 @@ public class DailyCambioFragment extends Fragment {
 
                 recyclerView.setAdapter(mAdapter);
 
-                utilities.loadingAnimation(View.GONE,"chasingDots",getActivity(),R.id.spin_kit);
+                if(getActivity() != null)
+                {
+                    utilities.loadingAnimation(View.GONE,"chasingDots",getActivity(),R.id.spin_kit);
 
-                //remove background
-                LinearLayout imgBackg = (LinearLayout) getActivity().findViewById(R.id.mybackg);
-                imgBackg.setVisibility(View.GONE);
+                    //remove background
+                    LinearLayout imgBackg = (LinearLayout) getActivity().findViewById(R.id.mybackg);
+                    imgBackg.setVisibility(View.GONE);
+                }
 
             }
         }
@@ -743,7 +747,7 @@ public class DailyCambioFragment extends Fragment {
     }
 
 
-    public void updateList(final Cambio cambio, Bank bank)
+    private void updateList(final Cambio cambio, Bank bank)
     {
         //Log.d("Hi update:", cambio.getBank());
 
@@ -757,7 +761,7 @@ public class DailyCambioFragment extends Fragment {
     }
 
 
-    public void updateWorker(Cambio cambio, Bank bank)
+    private void updateWorker(Cambio cambio, Bank bank)
     {
         // Log.d("Hi update2:", i.toString());
 
@@ -765,11 +769,8 @@ public class DailyCambioFragment extends Fragment {
         {
             if(this.cambiosLastUpdate.get(index).getBank().equals(cambio.getBank()))
             {
-
-
                 //Before update Cambio, copy it to calculate changeRate
-                Cambio cambioPrevious = new Cambio();
-                cambioPrevious = this.cambiosLastUpdate.get(index);
+                Cambio cambioPrevious = this.cambiosLastUpdate.get(index);
 
                 Double usdChangeRate = utilities.roundWithDecimalPlaces ((1.0 - Double.parseDouble(cambio.getUsdValue())/Double.parseDouble(cambioPrevious.getUsdValue()))*100,1);
                 Double euroChangeRate = utilities.roundWithDecimalPlaces (  (1.0 - Double.parseDouble(cambio.getEuroValue())/Double.parseDouble(cambioPrevious.getEuroValue()))*100,1);
@@ -893,11 +894,13 @@ public class DailyCambioFragment extends Fragment {
 
                  recyclerView.setAdapter(mAdapter);
 
-
-                utilities.loadingAnimation(View.GONE,"chasingDots",getActivity(),R.id.spin_kit);
-                //remove background
-                LinearLayout imgBackg = (LinearLayout) getActivity().findViewById(R.id.mybackg);
-                imgBackg.setVisibility(View.GONE);
+                 if(getActivity() != null)
+                 {
+                     utilities.loadingAnimation(View.GONE,"chasingDots",getActivity(),R.id.spin_kit);
+                     //remove background
+                     LinearLayout imgBackg = (LinearLayout) getActivity().findViewById(R.id.mybackg);
+                     imgBackg.setVisibility(View.GONE);
+                 }
 
                  break;
 
@@ -910,12 +913,18 @@ public class DailyCambioFragment extends Fragment {
 
     public void loadingAnimation(int visibility)
     {
-        ProgressBar progressBar = (ProgressBar) getActivity().findViewById(R.id.spin_kit);
-        progressBar.setVisibility(visibility);
-        //Circle circle = new Circle();
-        //FoldingCube fc = new FoldingCube();
-        ChasingDots cd = new ChasingDots();
-        progressBar.setIndeterminateDrawable(cd);
+
+        if(getActivity() != null)
+        {
+
+            ProgressBar progressBar = (ProgressBar) getActivity().findViewById(R.id.spin_kit);
+            progressBar.setVisibility(visibility);
+            //Circle circle = new Circle();
+            //FoldingCube fc = new FoldingCube();
+            ChasingDots cd = new ChasingDots();
+            progressBar.setIndeterminateDrawable(cd);
+
+        }
 
         /*Type of style
         RotatingPlane	RotatingPlane
@@ -940,7 +949,7 @@ public class DailyCambioFragment extends Fragment {
         */
     }
 
-    public void getCambiosValues(Cambio cambio)
+    private void getCambiosValues(Cambio cambio)
     {
 
         if(cambio != null)
@@ -971,7 +980,7 @@ public class DailyCambioFragment extends Fragment {
 
     }
 
-    public void getCambiosValuesOffline()
+    private void getCambiosValuesOffline()
     {
 
         if(cambiosLastUpdate != null)
@@ -1165,7 +1174,7 @@ public class DailyCambioFragment extends Fragment {
 
     }
 
-    public void storeSharedPreferences()
+    private void storeSharedPreferences()
     {
         if(cambiosLastUpdate != null)
         {
@@ -1251,7 +1260,7 @@ public class DailyCambioFragment extends Fragment {
 
     }
 
-    public boolean restoreSharedPreferences()
+    private boolean restoreSharedPreferences()
     {
         // Restore preferences
         List<Cambio> cambiosList = new ArrayList<>();
@@ -1264,8 +1273,8 @@ public class DailyCambioFragment extends Fragment {
             String jsonCambiosLastUdpate = settings.getString("cambiosLastUpdate", "NOK");
             String jsonBanksArray = settings.getString(ALLOWED_BANKS, "NOK");
 
-            if(!jsonCambiosLastUdpate.equals("NOK") && jsonCambiosLastUdpate != null &&
-                    !jsonBanksArray.equals("NOK") && jsonBanksArray != null)
+            if(jsonCambiosLastUdpate != null  && jsonBanksArray != null)
+            if(!jsonCambiosLastUdpate.equals("NOK")  && !jsonBanksArray.equals("NOK"))
             {
 
 
@@ -1315,23 +1324,27 @@ public class DailyCambioFragment extends Fragment {
                            {
                                for(int idx = 0; idx < cambiosLastUpdate.size(); idx++)
                                {
-                                   if(cambiosLastUpdate.get(idx).getBank().equals(cambio.getBank()))
+                                   if(cambio != null)
                                    {
-                                        if(cambiosLastUpdate.indexOf(cambio) == -1) //cambio not found meaning it's been changed
-                                        {
-                                            //save cambio and index to be updated afterwards
-                                            if(cambio != null)
-                                            {
-                                                IndexCambioPair indexCambioPair = new IndexCambioPair(idx,cambio);
+                                       if(cambiosLastUpdate.get(idx).getBank().equals(cambio.getBank()))
+                                       {
+                                           if(cambiosLastUpdate.indexOf(cambio) == -1) //cambio not found meaning it's been changed
+                                           {
+                                               //save cambio and index to be updated afterwards
+                                               if(cambio != null)
+                                               {
+                                                   IndexCambioPair indexCambioPair = new IndexCambioPair(idx,cambio);
 
-                                                if(indexCambioPair != null)
-                                                    indexCambioPairArrayList.add(indexCambioPair);
-                                               // Log.wtf("index,cambio: ", Integer.toString(idx) + " - BANK: " + cambio.getBank());
+                                                   if(indexCambioPair != null)
+                                                       indexCambioPairArrayList.add(indexCambioPair);
+                                                   // Log.wtf("index,cambio: ", Integer.toString(idx) + " - BANK: " + cambio.getBank());
 
-                                            }
+                                               }
 
-                                        }
+                                           }
+                                       }
                                    }
+
                                }
 
                            }
@@ -1549,7 +1562,7 @@ public class DailyCambioFragment extends Fragment {
     }
 
 
-    public void banksArraySharedPreferences()
+    private void banksArraySharedPreferences()
     {
         final boolean[] clearFlag = {false};
 
@@ -1713,7 +1726,7 @@ public class DailyCambioFragment extends Fragment {
         }
     }
 
-    public void updateBanksArrayAndSaveIt(Bank bank, int idx)
+    private void updateBanksArrayAndSaveIt(Bank bank, int idx)
     {
         if(bank != null && idx >= 0)
         {

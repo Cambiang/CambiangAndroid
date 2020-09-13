@@ -41,18 +41,11 @@ import java.util.List;
 import static java.lang.Thread.sleep;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link AdsFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link AdsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
+
 public class AdsFragment extends Fragment {
     public Toolbar toolbar;
 
-    Intent notificationIntent;
     Utilities utilities;
 
     Integer counter = 0;
@@ -72,11 +65,11 @@ public class AdsFragment extends Fragment {
     public static Tracker sTracker;
     public static final String GOOGLE_TRACK_ID ="UA-132922035-1";
 
-    public static final String PREFS_NAME = "SaveToNotification";
-    public static final String LOCAL_ADS_KEY = "LOCAL_ADS_KEY";
+    private static final String PREFS_NAME = "SaveToNotification";
+    private static final String LOCAL_ADS_KEY = "LOCAL_ADS_KEY";
 
-    String gMobAdsAtAdsState = "OFF";
-    String gMobAdsAtAdsType = "BANNER";
+    private String gMobAdsAtAdsState = "OFF";
+    private String gMobAdsAtAdsType = "BANNER";
     LinearLayout adLayout;
 
 
@@ -108,9 +101,16 @@ public class AdsFragment extends Fragment {
         utilities = new Utilities();
 
 
-        utilities.getDefaultTracker(getActivity().getApplicationContext()); //Analytics
+        if(getActivity() != null)
+        {
+            if(getActivity().getApplicationContext() != null)
+            {
+                utilities.getDefaultTracker(getActivity().getApplicationContext()); //Analytics
+                adLayout = new LinearLayout(getActivity().getApplicationContext());
+            }
 
-        adLayout = new LinearLayout(getActivity().getApplicationContext());
+        }
+
 
 
         adArrayList = new ArrayList<Ad>(0);
@@ -151,7 +151,7 @@ public class AdsFragment extends Fragment {
     }
 
 
-    public void addAdList(Ad ad)
+    private void addAdList(Ad ad)
     {
 
         if(ad != null && this.adArrayList != null)
@@ -165,17 +165,23 @@ public class AdsFragment extends Fragment {
 
             recyclerView.setAdapter(mAdapter);
 
-            utilities.loadingAnimation(View.GONE, "foldingCube", getActivity(), R.id.spin_kit_ads);
-            //remove background
-            LinearLayout imgBackg = (LinearLayout) getActivity().findViewById(R.id.mybackgAd);
-            imgBackg.setVisibility(View.GONE);
+            if(getActivity() != null)
+            {
+                if(getActivity().findViewById(R.id.mybackgAd) != null)
+                {
+                    utilities.loadingAnimation(View.GONE, "foldingCube", getActivity(), R.id.spin_kit_ads);
+                    //remove background
+                    LinearLayout imgBackg = (LinearLayout) getActivity().findViewById(R.id.mybackgAd);
+                    imgBackg.setVisibility(View.GONE);
+                }
+            }
 
         }
 
     }
 
 
-    public void updateList(Ad ad)
+    private void updateList(Ad ad)
     {
 
         if(ad != null && this.adArrayList != null)
@@ -194,10 +200,16 @@ public class AdsFragment extends Fragment {
 
                     recyclerView.setAdapter(mAdapter);
 
-                    utilities.loadingAnimation(View.GONE,"foldingCube",getActivity(),R.id.spin_kit_ads);
-                    //remove background
-                    LinearLayout imgBackg = (LinearLayout) getActivity().findViewById(R.id.mybackgAd);
-                    imgBackg.setVisibility(View.GONE);
+                    if(getActivity() != null)
+                    {
+                        if (getActivity().findViewById(R.id.mybackgAd) != null) {
+                            utilities.loadingAnimation(View.GONE, "foldingCube", getActivity(), R.id.spin_kit_ads);
+                            //remove background
+                            LinearLayout imgBackg = (LinearLayout) getActivity().findViewById(R.id.mybackgAd);
+                            imgBackg.setVisibility(View.GONE);
+                        }
+                    }
+
 
                     break;
 
@@ -236,7 +248,7 @@ public class AdsFragment extends Fragment {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                if(dataSnapshot.getValue() != null)
+                if(dataSnapshot.getValue() != null && dataSnapshot.getKey() != null)
                 {
                     if(dataSnapshot.getValue().equals("ON") && dataSnapshot.getKey().equals("gMobAdsAtAdsState"))
                     {
@@ -261,8 +273,11 @@ public class AdsFragment extends Fragment {
 
                     if(gMobAdsAtAdsState.equals("ON"))
                     {
-                        adLayout.setVisibility(View.GONE);
-                        adLayout = utilities.addAds(getActivity(), utilities.getTypeOfAd(gMobAdsAtAdsType), View.VISIBLE,1,0);
+                        if(getActivity() != null)
+                        {
+                            adLayout.setVisibility(View.GONE);
+                            adLayout = utilities.addAds(getActivity(), utilities.getTypeOfAd(gMobAdsAtAdsType), View.VISIBLE,1,0);
+                        }
                     }else
                     {
                         if(gMobAdsAtAdsState.equals("OFF"))
@@ -282,7 +297,7 @@ public class AdsFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if(dataSnapshot.getValue() != null)
+                if(dataSnapshot.getValue() != null && dataSnapshot.getKey() != null)
                 {
                     if(dataSnapshot.getValue().equals("ON") && dataSnapshot.getKey().equals("gMobAdsAtAdsState"))
                     {
@@ -305,9 +320,12 @@ public class AdsFragment extends Fragment {
 
                     if(gMobAdsAtAdsState.equals("ON"))
                     {
-                        adLayout.setVisibility(View.GONE);
-                        adLayout = utilities.addAds(getActivity(), utilities.getTypeOfAd(gMobAdsAtAdsType), View.VISIBLE,2,0);
-                        //Log.wtf("ON: ", "Im BACK ON!!");
+                        if(getActivity() != null)
+                        {
+                            adLayout.setVisibility(View.GONE);
+                            adLayout = utilities.addAds(getActivity(), utilities.getTypeOfAd(gMobAdsAtAdsType), View.VISIBLE,2,0);
+                            //Log.wtf("ON: ", "Im BACK ON!!");
+                        }
 
                     }else
                     {
@@ -342,7 +360,7 @@ public class AdsFragment extends Fragment {
         });
     }
 
-    public void onDataAddedUpdateList()
+    private void onDataAddedUpdateList()
     {
         ref.limitToLast(3).addChildEventListener(
                 new ChildEventListener()
@@ -408,7 +426,7 @@ public class AdsFragment extends Fragment {
         );
     }
 
-    public void onDataChangedUpdateList()
+    private void onDataChangedUpdateList()
     {
         ref.addChildEventListener(
                 new ChildEventListener()
@@ -426,23 +444,25 @@ public class AdsFragment extends Fragment {
                             {
                                 Ad ad = dataSnapshot.getValue(Ad.class);
 
-                                if(ad.getState().equals("ON"))
+                                if(ad != null)
                                 {
-                                    if(isAdLocallySaved(ad)) //ONLY SAVE IF AD WAS NOT ALREADY SAVED
+                                    if(ad.getState().equals("ON"))
                                     {
-                                        updateList(ad);
-                                        saveAdsLocally();
-
-                                        //Log.wtf("LIST U",ad.getTitle());
-                                    }else
+                                        if(isAdLocallySaved(ad)) //ONLY SAVE IF AD WAS NOT ALREADY SAVED
                                         {
-                                           // Log.wtf("LIST A",ad.getTitle());
+                                            updateList(ad);
+                                            saveAdsLocally();
+
+                                            //Log.wtf("LIST U",ad.getTitle());
+                                        }else
+                                        {
+                                            // Log.wtf("LIST A",ad.getTitle());
 
                                             addAdList(ad);
                                             saveAdsLocally();
                                         }
 
-                                }else
+                                    }else
                                     {
                                         if(isAdLocallySaved(ad)) //ONLY SAVE IF AD WAS NOT ALREADY SAVED
                                         {
@@ -452,6 +472,8 @@ public class AdsFragment extends Fragment {
                                             updateScreen();
                                         }
                                     }
+
+                                }
 
                             }
                         }catch (Exception e)
@@ -481,7 +503,7 @@ public class AdsFragment extends Fragment {
         );
     }
 
-    public void onDataRemovedUpdateList()
+    private void onDataRemovedUpdateList()
     {
         ref.addChildEventListener(
                 new ChildEventListener()
@@ -529,7 +551,7 @@ public class AdsFragment extends Fragment {
         );
     }
 
-    public void flushAndReloadAllAds()
+    private void flushAndReloadAllAds()
     {
 
         refAdmin.child("reloadAllAds").addValueEventListener(new ValueEventListener() {
@@ -585,36 +607,39 @@ public class AdsFragment extends Fragment {
 
     }
 
-    public void saveAdsLocally()
+    private void saveAdsLocally()
     {
         if(adArrayList != null)
         {
             if(adArrayList.size() > 0 )
             {
-                SharedPreferences settings = getActivity().getSharedPreferences( this.LOCAL_ADS_KEY, 0);
-
-                //Set the values
-                if(settings != null)
+                if(getActivity() != null)
                 {
-                    GsonBuilder gsonBuilder = new GsonBuilder();
-                    Gson gson = gsonBuilder.create();
+                    SharedPreferences settings = getActivity().getSharedPreferences( LOCAL_ADS_KEY, 0);
+
+                    //Set the values
+                    if(settings != null)
+                    {
+                        GsonBuilder gsonBuilder = new GsonBuilder();
+                        Gson gson = gsonBuilder.create();
 
 
-                    String jsonAdsLastUdpate = gson.toJson(adArrayList);
+                        String jsonAdsLastUdpate = gson.toJson(adArrayList);
 
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString(this.LOCAL_ADS_KEY,""); // flush it first
-                    editor.putString(this.LOCAL_ADS_KEY,jsonAdsLastUdpate);
-                    editor.apply();
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.putString(LOCAL_ADS_KEY,""); // flush it first
+                        editor.putString(LOCAL_ADS_KEY,jsonAdsLastUdpate);
+                        editor.apply();
 
 
-                    // Commit the edits!
+                        // Commit the edits!
 
-                    // apply() changes the in-memory SharedPreferences object immediately but writes the updates to disk asynchronously.
-                    //Alternatively, you can use commit() to write the data to disk synchronously.
-                    //  But because commit() is synchronous, you should avoid calling it from your main thread because it could
-                    //pause your UI rendering.
-                    //editor.commit();
+                        // apply() changes the in-memory SharedPreferences object immediately but writes the updates to disk asynchronously.
+                        //Alternatively, you can use commit() to write the data to disk synchronously.
+                        //  But because commit() is synchronous, you should avoid calling it from your main thread because it could
+                        //pause your UI rendering.
+                        //editor.commit();
+                    }
                 }
 
             }
@@ -623,45 +648,49 @@ public class AdsFragment extends Fragment {
 
     }
 
-    public boolean readAdsLocally()
+    private boolean readAdsLocally()
     {
         // Loading Data, show loading animation while loading...
         utilities.loadingAnimation(View.VISIBLE,"foldingCube",getActivity(),R.id.spin_kit_ads);
 
         List<Ad> adsList = new ArrayList<>();
 
-        // Restore preferences
-        SharedPreferences settings = getActivity().getSharedPreferences( this.LOCAL_ADS_KEY, 0);
-
-        if(settings != null)
+        if(getActivity()!= null)
         {
-            //if some preference does not exist returns NOT OK - NOK
-            Gson gson = new Gson();
-            String jsonAdsUdpate = settings.getString(this.LOCAL_ADS_KEY, "NOK");
-
-            if(!jsonAdsUdpate.equals("NOK") && jsonAdsUdpate != null)
+            // Restore preferences
+            SharedPreferences settings = getActivity().getSharedPreferences( LOCAL_ADS_KEY, 0);
+            if(settings != null)
             {
-                adsList =  Arrays.asList(gson.fromJson(jsonAdsUdpate, Ad[].class));
+                //if some preference does not exist returns NOT OK - NOK
+                Gson gson = new Gson();
+                String jsonAdsUdpate = settings.getString(LOCAL_ADS_KEY, "NOK");
 
-                adArrayList.clear();
-                adArrayList = new ArrayList<>(adsList);
-
-                if(adArrayList != null)
+                if(jsonAdsUdpate != null)
+                if(!jsonAdsUdpate.equals("NOK"))
                 {
-                    if(adArrayList.size() > 0)
+                    adsList =  Arrays.asList(gson.fromJson(jsonAdsUdpate, Ad[].class));
+
+                    adArrayList.clear();
+                    adArrayList = new ArrayList<>(adsList);
+
+                    if(adArrayList != null)
                     {
-                        return true;
+                        if(adArrayList.size() > 0)
+                        {
+                            return true;
+                        }
                     }
                 }
-            }
 
+            }
         }
+
 
         return false;
 
     }
 
-    public void removeAdLocally(Ad adToRemove)
+    private void removeAdLocally(Ad adToRemove)
     {
         if(adToRemove != null)
         {
@@ -679,7 +708,7 @@ public class AdsFragment extends Fragment {
         }
     }
 
-    public boolean isAdLocallySaved(Ad ad)
+    private boolean isAdLocallySaved(Ad ad)
     {
         if(ad != null && adArrayList.size() > 0)
         {
@@ -698,7 +727,7 @@ public class AdsFragment extends Fragment {
         return false;
     }
 
-    public int getAdIndex(Ad ad)
+    private int getAdIndex(Ad ad)
     {
 
         if(ad != null && adArrayList.size() > 0)
@@ -716,7 +745,7 @@ public class AdsFragment extends Fragment {
         return -1;
     }
 
-    public void updateScreen()
+    private void updateScreen()
     {
 
             Collections.sort(adArrayList, new AdsFragment.AdComparator());
@@ -725,15 +754,17 @@ public class AdsFragment extends Fragment {
 
             recyclerView.setAdapter(mAdapter);
 
-
-        utilities.loadingAnimation(View.GONE,"foldingCube",getActivity(),R.id.spin_kit_ads);
-        //remove background
-        LinearLayout imgBackg = (LinearLayout) getActivity().findViewById(R.id.mybackgAd);
-        imgBackg.setVisibility(View.GONE);
+        if(getActivity() != null)
+        {
+            utilities.loadingAnimation(View.GONE, "foldingCube", getActivity(), R.id.spin_kit_ads);
+            //remove background
+            LinearLayout imgBackg = (LinearLayout) getActivity().findViewById(R.id.mybackgAd);
+            imgBackg.setVisibility(View.GONE);
+        }
 
     }
 
-    public void loadData()
+    private void loadData()
     {
         if(!readAdsLocally())
         {
@@ -754,7 +785,7 @@ public class AdsFragment extends Fragment {
 
     }
 
-    public void loadDataFromDB()
+    private void loadDataFromDB()
     {
         ref.addChildEventListener(
                 new ChildEventListener()

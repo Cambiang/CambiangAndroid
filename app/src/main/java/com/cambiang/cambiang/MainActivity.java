@@ -91,7 +91,6 @@ import java.util.TimerTask;
 import java.util.concurrent.Executor;
 
 import static android.app.Notification.EXTRA_CHANNEL_ID;
-import static com.cambiang.cambiang.AdsFragment.PREFS_NAME;
 
 
 public class MainActivity extends AppCompatActivity  {
@@ -415,10 +414,12 @@ public class MainActivity extends AppCompatActivity  {
 
         toolbar = (Toolbar) findViewById(R.id.main_tool_bar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
+        if(getSupportActionBar() != null)
+        {
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
 
         // Log.wtf("ELEVATION", Float.toString(getSupportActionBar().getElevation()) );
 
@@ -523,7 +524,7 @@ public class MainActivity extends AppCompatActivity  {
                                             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
 
-                                                if(dataSnapshot.getValue() != null)
+                                                if(dataSnapshot.getValue() != null && dataSnapshot.getKey() != null)
                                                 {
                                                     if(dataSnapshot.getValue().equals("OFF") && dataSnapshot.getKey().equals("floatingButton"))
                                                     {
@@ -543,7 +544,7 @@ public class MainActivity extends AppCompatActivity  {
 
                                             @Override
                                             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                                                if(dataSnapshot.getValue() != null)
+                                                if(dataSnapshot.getValue() != null  && dataSnapshot.getKey() != null)
                                                 {
                                                     if(dataSnapshot.getKey().equals("floatingButton"))
                                                     {
@@ -609,7 +610,7 @@ public class MainActivity extends AppCompatActivity  {
                                             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
 
-                                                if(dataSnapshot.getValue() != null)
+                                                if(dataSnapshot.getValue() != null  && dataSnapshot.getKey() != null)
                                                 {
                                                     if(dataSnapshot.getValue().equals("OFF") && dataSnapshot.getKey().equals("floatingButton"))
                                                     {
@@ -629,7 +630,7 @@ public class MainActivity extends AppCompatActivity  {
 
                                             @Override
                                             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                                                if(dataSnapshot.getValue() != null)
+                                                if(dataSnapshot.getValue() != null  && dataSnapshot.getKey() != null)
                                                 {
                                                     if(dataSnapshot.getKey().equals("floatingButton"))
                                                     {
@@ -751,7 +752,7 @@ public class MainActivity extends AppCompatActivity  {
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
 
-                        if(dataSnapshot.getValue() != null)
+                        if(dataSnapshot.getValue() != null  && dataSnapshot.getKey() != null)
                         {
                             if(dataSnapshot.getValue().equals("OFF") && dataSnapshot.getKey().equals("statisticsMenuOption"))
                             {
@@ -777,7 +778,7 @@ public class MainActivity extends AppCompatActivity  {
 
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        if(dataSnapshot.getValue() != null)
+                        if(dataSnapshot.getValue() != null  && dataSnapshot.getKey() != null)
                         {
                             if(dataSnapshot.getKey().equals("statisticsMenuOption"))
                             {
@@ -831,7 +832,7 @@ public class MainActivity extends AppCompatActivity  {
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
 
-                        if(dataSnapshot.getValue() != null)
+                        if(dataSnapshot.getValue() != null  && dataSnapshot.getKey() != null)
                         {
                             if(dataSnapshot.getValue().equals("OFF") && dataSnapshot.getKey().equals("rankingMenuOption"))
                             {
@@ -857,7 +858,7 @@ public class MainActivity extends AppCompatActivity  {
 
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        if(dataSnapshot.getValue() != null)
+                        if(dataSnapshot.getValue() != null  && dataSnapshot.getKey() != null)
                         {
                             if(dataSnapshot.getKey().equals("rankingMenuOption"))
                             {
@@ -972,6 +973,7 @@ public class MainActivity extends AppCompatActivity  {
                                     {
                                         Ad ad = dataSnapshot.getValue(Ad.class);
 
+                                        if(ad != null)
                                         if(ad.getState().equals("ON"))
                                         {
                                             updateList(ad);
@@ -1106,6 +1108,7 @@ public class MainActivity extends AppCompatActivity  {
                 {
                     Ad ad = dataSnapshot.getValue(Ad.class);
 
+                    if(ad != null)
                     if(ad.getState().equals("ON"))
                     {
                         adArrayListExternal.add(ad);
@@ -1139,6 +1142,7 @@ public class MainActivity extends AppCompatActivity  {
                 {
                     Ad ad = dataSnapshot.getValue(Ad.class);
 
+                    if(ad != null)
                     if(ad.getState().equals("ON"))
                     {
 
@@ -1419,7 +1423,7 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                if(dataSnapshot.getValue() != null)
+                if(dataSnapshot.getValue() != null  && dataSnapshot.getKey() != null)
                 {
                     if(dataSnapshot.getValue().equals("ON") && dataSnapshot.getKey().equals("gMobAdsAtConverterState"))
                     {
@@ -1467,7 +1471,7 @@ public class MainActivity extends AppCompatActivity  {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if(dataSnapshot.getValue() != null)
+                if(dataSnapshot.getValue() != null  && dataSnapshot.getKey() != null)
                 {
                     if(dataSnapshot.getValue().equals("ON") && dataSnapshot.getKey().equals("gMobAdsAtConverterState"))
                     {
@@ -1596,11 +1600,16 @@ public class MainActivity extends AppCompatActivity  {
 
                for (DataSnapshot data : dataSnapshot.getChildren())
                {
-                   String token = data.getValue().toString();
-                   if(token.equals(mToken))
+
+                   if(data.getValue() != null)
                    {
-                       counter[0] = counter[0] + 1;
+                       String token = data.getValue().toString();
+                       if(token.equals(mToken))
+                       {
+                           counter[0] = counter[0] + 1;
+                       }
                    }
+
                }
 
             if(counter[0] == 0)
@@ -1625,15 +1634,19 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                if(dataSnapshot.getValue() != null && dataSnapshot.getKey().equals("adsRunningTime"))
+                if(dataSnapshot.getValue() != null && dataSnapshot.getKey() != null)
                 {
-                   String adsRunningTimeStr = dataSnapshot.getValue().toString();
+                    if(dataSnapshot.getKey().equals("adsRunningTime"))
+                    {
+                        String adsRunningTimeStr = dataSnapshot.getValue().toString();
 
-                   if(adsRunningTimeStr != null)
-                   {
-                       storeSharedPreferences(adsRunningTimeStr);
+                        if(adsRunningTimeStr != null)
+                        {
+                            storeSharedPreferences(adsRunningTimeStr);
 
-                   }
+                        }
+                    }
+
                 }
 
             }
@@ -1646,9 +1659,10 @@ public class MainActivity extends AppCompatActivity  {
                     {
                         String adsRunningTimeStr = dataSnapshot.getValue().toString();
 
-                        if(adsRunningTimeStr != null && dataSnapshot.getKey().equals("adsRunningTime"))
+                        if(adsRunningTimeStr != null && dataSnapshot.getKey() != null)
                         {
-                            storeSharedPreferences(adsRunningTimeStr);
+                            if(dataSnapshot.getKey().equals("adsRunningTime"))
+                                storeSharedPreferences(adsRunningTimeStr);
                         }
                     }
                 }
@@ -1821,6 +1835,7 @@ public class MainActivity extends AppCompatActivity  {
                                                     {
                                                         Bank cambioHouse = dataSnapshot.getValue(Bank.class);
 
+                                                        if(cambioHouse != null && cambio != null)
                                                         if(cambio.getBank() != null && cambioHouse.getName() != null)
                                                         {
 
