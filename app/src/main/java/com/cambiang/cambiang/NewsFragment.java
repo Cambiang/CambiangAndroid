@@ -71,6 +71,8 @@ public class NewsFragment extends Fragment {
 
 
     public static final String  PREFS_NAME_NEWS = "newsUpdates";
+    public static final String LOCAL_NEWS_KEY = "LOCAL_NEWS_KEY";
+
 
     Activity mainActivity = getActivity();
     SharedPreferences settings;
@@ -112,7 +114,7 @@ public class NewsFragment extends Fragment {
 
 
         // Loading Data, show loading animation while loading...
-        utilities.loadingAnimation(View.VISIBLE,"circle",getActivity(),R.id.spin_kit_news);
+        utilities.loadingAnimation(View.VISIBLE,"foldingCube",getActivity(),R.id.spin_kit_news);
 
 
         // Write a message to the database
@@ -123,7 +125,11 @@ public class NewsFragment extends Fragment {
 
 
             //Initialize and react in case of changes on the News
-        generalManager();
+        //generalManager();
+        loadData();
+
+        //Flush and reload news
+        flushAndReloadAllNews();
 
        // manager();
 
@@ -455,7 +461,6 @@ public class NewsFragment extends Fragment {
 
     }
 
-
     public void copyFreshNewsUpdatesAndUpdateList()
     {
 
@@ -560,8 +565,6 @@ public class NewsFragment extends Fragment {
         });
 
     }
-
-
 
     public void storeSharedPreferences()
     {
@@ -839,6 +842,476 @@ public class NewsFragment extends Fragment {
             this.index = index;
             this.news = news;
         }
+    }
+
+
+
+    public void onDataAddedUpdateList()
+    {
+        ref.limitToLast(2).addChildEventListener(
+                new ChildEventListener()
+                {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
+                    {
+                        //Log.d("TAG", "Key:" + dataSnapshot.getKey());
+                        //Log.d("TAG", "Value:" + dataSnapshot.getValue());
+
+                        // A new comment has been added, add it to the displayed list
+
+                        try {
+
+
+                            if(dataSnapshot.getValue(News.class) != null)
+                            {
+                                News news = dataSnapshot.getValue(News.class);
+
+                                if(news != null)
+                                {
+                                    if(!isNewsLocallySaved(news)) //ONLY SAVE IF AD WAS NOT ALREADY SAVED
+                                    {
+                                        updateList(news); //Update list with the last 3 Ads added; IN case the user
+                                        //have been a while without opening the App
+                                        saveNewsLocally();
+                                    }
+                                    //Log.wtf("Ad",ad.getTitle());
+                                }
+
+                            }
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                        // ...
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {}
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {}
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {}
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("TAG", "postComments:onCancelled", databaseError.toException());
+                        Toast.makeText(mContext, "Failed to load comments.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
+
+    public void onDataChangedUpdateList()
+    {
+        ref.addChildEventListener(
+                new ChildEventListener()
+                {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {}
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName)
+                    {
+                        //Update Ad with new values
+                        try {
+                            if(dataSnapshot.getValue(News.class) != null)
+                            {
+                                News news = dataSnapshot.getValue(News.class);
+
+                                if(isNewsLocallySaved(news)) //ONLY SAVE IF AD WAS NOT ALREADY SAVED
+                                {
+                                    updateList(news);
+                                    saveNewsLocally();
+                                }else
+                                {
+                                    addNewsList(news);
+                                    saveNewsLocally();
+                                }
+
+                            }
+                        }catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError)
+                    {
+                        Log.w("TAG", "postComments:onCancelled", databaseError.toException());
+                        Toast.makeText(mContext, "Failed to load comments.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
+
+    public void onDataRemovedUpdateList()
+    {
+        ref.addChildEventListener(
+                new ChildEventListener()
+                {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {}
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) { }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot)
+                    {
+                        try {
+                            if(dataSnapshot.getValue(News.class) != null)
+                            {
+                                News news = dataSnapshot.getValue(News.class);
+
+                                if(isNewsLocallySaved(news))
+                                {
+                                    removeNewsLocally(news);
+                                    updateScreen();
+                                }
+                            }
+                        }catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName)
+                    {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("TAG", "postComments:onCancelled", databaseError.toException());
+                        Toast.makeText(mContext, "Failed to load comments.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
+
+    public void flushAndReloadAllNews()
+    {
+
+        //Copy and pasted from Ads, left some Ads commands as same
+        DatabaseReference refAdmin = database.getReference("Admin");
+
+        refAdmin.child("reloadAllAds").addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.getValue() != null)
+                {
+                    String cmd = dataSnapshot.getValue().toString();
+
+                    if (cmd.equals("ON"))
+                    {
+                        if(newsArrayList != null)
+                        {
+                            if(newsArrayList.size()>0)
+                            {
+                                newsArrayList.clear();
+                            }
+                        }else
+                        {
+                            newsArrayList = new ArrayList<>();
+                        }
+                         //Log.wtf("COMMAND","ON");
+                        loadDataFromDB();
+
+                    }else
+                    {
+                        //AUTO MODE
+
+                        if(!utilities.isTheSameMonth("MONTH_FOR_ADS_RELOAD",getActivity()))
+                        {
+                            if(newsArrayList != null)
+                            {
+                                if(newsArrayList.size()>0)
+                                {
+                                    newsArrayList.clear();
+                                }
+                            }else
+                            {
+                                newsArrayList = new ArrayList<>();
+                            }
+
+                            loadDataFromDB();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void saveNewsLocally()
+    {
+        if(newsArrayList != null)
+        {
+            if(newsArrayList.size() > 0 )
+            {
+                SharedPreferences settings = getActivity().getSharedPreferences( this.LOCAL_NEWS_KEY, 0);
+
+                //Set the values
+                if(settings != null)
+                {
+                    GsonBuilder gsonBuilder = new GsonBuilder();
+                    Gson gson = gsonBuilder.create();
+
+
+                    String jsonAdsLastUdpate = gson.toJson(newsArrayList);
+
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString(this.LOCAL_NEWS_KEY,""); // flush it first
+                    editor.putString(this.LOCAL_NEWS_KEY,jsonAdsLastUdpate);
+                    editor.apply();
+
+
+                    // Commit the edits!
+
+                    // apply() changes the in-memory SharedPreferences object immediately but writes the updates to disk asynchronously.
+                    //Alternatively, you can use commit() to write the data to disk synchronously.
+                    //  But because commit() is synchronous, you should avoid calling it from your main thread because it could
+                    //pause your UI rendering.
+                    //editor.commit();
+                }
+
+            }
+        }
+
+
+    }
+
+    public boolean readNewsLocally()
+    {
+        // Loading Data, show loading animation while loading...
+        utilities.loadingAnimation(View.VISIBLE,"foldingCube",getActivity(),R.id.spin_kit_news);
+
+        List<News> newsList = new ArrayList<>();
+
+        // Restore preferences
+        SharedPreferences settings = getActivity().getSharedPreferences( this.LOCAL_NEWS_KEY, 0);
+
+        if(settings != null)
+        {
+            //if some preference does not exist returns NOT OK - NOK
+            Gson gson = new Gson();
+            String jsonNewsUdpate = settings.getString(this.LOCAL_NEWS_KEY, "NOK");
+
+            if(!jsonNewsUdpate.equals("NOK") && jsonNewsUdpate != null)
+            {
+                newsList =  Arrays.asList(gson.fromJson(jsonNewsUdpate, News[].class));
+
+                newsArrayList.clear();
+                newsArrayList = new ArrayList<>(newsList);
+
+                if(newsArrayList != null)
+                {
+                    if(newsArrayList.size() > 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+        }
+
+        return false;
+
+    }
+
+    public void removeNewsLocally(News newsToRemove)
+    {
+        if(newsToRemove != null)
+        {
+            if(isNewsLocallySaved(newsToRemove))
+            {
+                int idx = getNewsIndex(newsToRemove);
+                if(idx >= 0)
+                {
+                    newsArrayList.remove(idx);
+                    this.saveNewsLocally();
+
+                }
+
+            }
+        }
+    }
+
+    public boolean isNewsLocallySaved(News news)
+    {
+        if(news != null && newsArrayList.size() > 0)
+        {
+            for (News mNews : newsArrayList)
+            {
+                if(mNews != null)
+                {
+                    if(news.getTitle().equals(mNews.getTitle()) && news.getId().equals(mNews.getId()))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public int getNewsIndex(News news)
+    {
+
+        if(news != null && newsArrayList.size() > 0)
+        {
+            for(int idx = 0; idx < newsArrayList.size(); idx++)
+            {
+                if(newsArrayList.get(idx).getId().equals(news.getId()))
+                {
+                    return idx;
+                }
+            }
+
+        }
+
+        return -1;
+    }
+
+    public void updateScreen()
+    {
+
+        Collections.sort(newsArrayList, new NewsFragment.NewsComparator());
+
+        mAdapter = new NewsAdapter(newsArrayList);
+
+        recyclerView.setAdapter(mAdapter);
+
+
+        if((LinearLayout) getActivity().findViewById(R.id.mybackgNews) != null)
+        {
+            try
+            {
+                utilities.loadingAnimation(View.GONE,"foldingCube",getActivity(),R.id.spin_kit_news);
+                LinearLayout imgBackg = (LinearLayout) getActivity().findViewById(R.id.mybackgNews);
+                imgBackg.setVisibility(View.GONE);
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+
+        }
+
+
+    }
+
+    public void loadData()
+    {
+        if(!readNewsLocally())
+        {
+            loadDataFromDB();
+
+            // Log.wtf("LOAD","CLOUDY");
+        }
+
+
+        //Data Listners for change
+        onDataAddedUpdateList();
+        onDataChangedUpdateList();
+        onDataRemovedUpdateList();
+
+        // Log.wtf("LOAD","LOCALLY");
+
+        updateScreen();
+
+    }
+
+    public void loadDataFromDB()
+    {
+        ref.addChildEventListener(
+                new ChildEventListener()
+                {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
+                    {
+                        //Log.d("TAG", "Key:" + dataSnapshot.getKey());
+                        //Log.d("TAG", "Value:" + dataSnapshot.getValue());
+
+                        // A new comment has been added, add it to the displayed list
+
+                        try {
+
+
+                            if(dataSnapshot.getValue(Ad.class) != null)
+                            {
+                                News news = dataSnapshot.getValue(News.class);
+
+                                if(news != null)
+                                {
+                                    addNewsList(news);
+                                    saveNewsLocally();
+                                }
+
+                            }
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                        // ...
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName)
+                    {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("TAG", "postComments:onCancelled", databaseError.toException());
+                        Toast.makeText(mContext, "Failed to load comments.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 
 

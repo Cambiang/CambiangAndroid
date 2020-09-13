@@ -144,6 +144,10 @@ public class MainActivity extends AppCompatActivity  {
         banksArray = new ArrayList<Bank>(0);
 
         // Write a message to the database
+        if(FirebaseDatabase.getInstance() != null)
+        {
+            database = FirebaseDatabase.getInstance();
+
         database = FirebaseDatabase.getInstance();
         ref = database.getReference("Ad");
         refAdmin = database.getReference("Admin");
@@ -245,9 +249,9 @@ public class MainActivity extends AppCompatActivity  {
 
 
         //store cambios cambio house into shared Preferences
-        new ThreadPerTaskExecutor().execute(storeCambioHouseSharedPreferencesTask());
+       // new ThreadPerTaskExecutor().execute(storeCambioHouseSharedPreferencesTask());
 
-
+        }
     }
 
 

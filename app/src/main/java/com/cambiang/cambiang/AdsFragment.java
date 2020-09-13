@@ -1,10 +1,9 @@
 package com.cambiang.cambiang;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,9 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.firebase.database.ChildEventListener;
@@ -32,11 +27,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import static java.lang.Thread.sleep;
 
@@ -73,6 +73,7 @@ public class AdsFragment extends Fragment {
     public static final String GOOGLE_TRACK_ID ="UA-132922035-1";
 
     public static final String PREFS_NAME = "SaveToNotification";
+    public static final String LOCAL_ADS_KEY = "LOCAL_ADS_KEY";
 
     String gMobAdsAtAdsState = "OFF";
     String gMobAdsAtAdsType = "BANNER";
@@ -123,7 +124,7 @@ public class AdsFragment extends Fragment {
 
 
         // Loading Data, show loading animation while loading...
-        utilities.loadingAnimation(View.VISIBLE,"circle",getActivity(),R.id.spin_kit_ads);
+        utilities.loadingAnimation(View.VISIBLE,"foldingCube",getActivity(),R.id.spin_kit_ads);
 
 
         // Write a message to the database
@@ -132,11 +133,11 @@ public class AdsFragment extends Fragment {
         refAdmin = database.getReference("Admin");
 
 
-
-
         //Initialize and react in case of changes on the Ad
-        manager();
+        loadData();
 
+        //Flush and reload all Data
+        flushAndReloadAllAds();
 
         // notificationIntent = new Intent(getActivity().getApplicationContext(), NotificationService.class);
         //getActivity().startService(notificationIntent);
@@ -150,96 +151,8 @@ public class AdsFragment extends Fragment {
     }
 
 
-    public void manager()
-    {
-
-        ref.addChildEventListener(
-                new ChildEventListener()
-                {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
-                    {
-                        //Log.d("TAG", "Key:" + dataSnapshot.getKey());
-                        //Log.d("TAG", "Value:" + dataSnapshot.getValue());
-
-                        // A new comment has been added, add it to the displayed list
-
-                        try {
-
-
-                            if(dataSnapshot.getValue(Ad.class) != null)
-                            {
-                                Ad ad = dataSnapshot.getValue(Ad.class);
-
-                                if(ad != null)
-                                {
-
-                                    if(ad.getState().equals("ON"))
-                                    {
-                                        addAdList(ad);
-                                    }
-
-                                    //Log.wtf("Ad",ad.getTitle());
-                                }
-
-                            }
-
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-
-                        // ...
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName)
-                    {
-                        //Update Ad with new values
-
-                        try {
-                            if(dataSnapshot.getValue(Ad.class) != null)
-                            {
-                                Ad ad = dataSnapshot.getValue(Ad.class);
-
-                                if(ad.getState().equals("ON"))
-                                {
-                                    updateList(ad);
-                                }
-
-                            }
-                        }catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.w("TAG", "postComments:onCancelled", databaseError.toException());
-                        Toast.makeText(mContext, "Failed to load comments.",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
-    }
-
-
     public void addAdList(Ad ad)
     {
-
 
         if(ad != null && this.adArrayList != null)
         {
@@ -258,8 +171,6 @@ public class AdsFragment extends Fragment {
             imgBackg.setVisibility(View.GONE);
 
         }
-
-
 
     }
 
@@ -431,6 +342,485 @@ public class AdsFragment extends Fragment {
         });
     }
 
+    public void onDataAddedUpdateList()
+    {
+        ref.limitToLast(3).addChildEventListener(
+                new ChildEventListener()
+                {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
+                    {
+                        //Log.d("TAG", "Key:" + dataSnapshot.getKey());
+                        //Log.d("TAG", "Value:" + dataSnapshot.getValue());
 
+                        // A new comment has been added, add it to the displayed list
+
+                        try {
+
+
+                            if(dataSnapshot.getValue(Ad.class) != null)
+                            {
+                                Ad ad = dataSnapshot.getValue(Ad.class);
+
+                                if(ad != null)
+                                {
+
+                                    if(ad.getState().equals("ON"))
+                                    {
+                                        if(!isAdLocallySaved(ad)) //ONLY SAVE IF AD WAS NOT ALREADY SAVED
+                                        {
+                                            updateList(ad); //Update list with the last 3 Ads added; IN case the user
+                                            //have been a while without opening the App
+                                            saveAdsLocally();
+                                        }
+                                    }
+
+                                    //Log.wtf("Ad",ad.getTitle());
+                                }
+
+                            }
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                        // ...
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {}
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {}
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {}
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("TAG", "postComments:onCancelled", databaseError.toException());
+                        Toast.makeText(mContext, "Failed to load comments.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
+
+    public void onDataChangedUpdateList()
+    {
+        ref.addChildEventListener(
+                new ChildEventListener()
+                {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {}
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName)
+                    {
+                        //Update Ad with new values
+
+                        try {
+                            if(dataSnapshot.getValue(Ad.class) != null)
+                            {
+                                Ad ad = dataSnapshot.getValue(Ad.class);
+
+                                if(ad.getState().equals("ON"))
+                                {
+                                    if(isAdLocallySaved(ad)) //ONLY SAVE IF AD WAS NOT ALREADY SAVED
+                                    {
+                                        updateList(ad);
+                                        saveAdsLocally();
+
+                                        //Log.wtf("LIST U",ad.getTitle());
+                                    }else
+                                        {
+                                           // Log.wtf("LIST A",ad.getTitle());
+
+                                            addAdList(ad);
+                                            saveAdsLocally();
+                                        }
+
+                                }else
+                                    {
+                                        if(isAdLocallySaved(ad)) //ONLY SAVE IF AD WAS NOT ALREADY SAVED
+                                        {
+                                            //Log.wtf("LIST R",ad.getTitle());
+
+                                            removeAdLocally(ad);
+                                            updateScreen();
+                                        }
+                                    }
+
+                            }
+                        }catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("TAG", "postComments:onCancelled", databaseError.toException());
+                        Toast.makeText(mContext, "Failed to load comments.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
+
+    public void onDataRemovedUpdateList()
+    {
+        ref.addChildEventListener(
+                new ChildEventListener()
+                {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {}
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) { }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot)
+                    {
+                        try {
+                            if(dataSnapshot.getValue(Ad.class) != null)
+                            {
+                                Ad ad = dataSnapshot.getValue(Ad.class);
+
+                               if(isAdLocallySaved(ad))
+                                {
+                                    removeAdLocally(ad);
+                                    updateScreen();
+
+                                }
+                            }
+                        }catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("TAG", "postComments:onCancelled", databaseError.toException());
+                        Toast.makeText(mContext, "Failed to load comments.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
+
+    public void flushAndReloadAllAds()
+    {
+
+        refAdmin.child("reloadAllAds").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if(dataSnapshot.getValue() != null)
+                {
+                    String cmd = dataSnapshot.getValue().toString();
+
+                    if (cmd.equals("ON"))
+                    {
+                        if(adArrayList != null)
+                        {
+                            if(adArrayList.size()>0)
+                            {
+                                adArrayList.clear();
+                            }
+                        }else
+                            {
+                                adArrayList = new ArrayList<>();
+                            }
+                       // Log.wtf("COMMAND","ON");
+                        loadDataFromDB();
+                    }else
+                    {
+                        //AUTO MODE
+
+                        if(!utilities.isTheSameMonth("MONTH_FOR_ADS_RELOAD",getActivity()))
+                        {
+                            if(adArrayList != null)
+                            {
+                                if(adArrayList.size()>0)
+                                {
+                                    adArrayList.clear();
+                                }
+                            }else
+                            {
+                                adArrayList = new ArrayList<>();
+                            }
+
+                            loadDataFromDB();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void saveAdsLocally()
+    {
+        if(adArrayList != null)
+        {
+            if(adArrayList.size() > 0 )
+            {
+                SharedPreferences settings = getActivity().getSharedPreferences( this.LOCAL_ADS_KEY, 0);
+
+                //Set the values
+                if(settings != null)
+                {
+                    GsonBuilder gsonBuilder = new GsonBuilder();
+                    Gson gson = gsonBuilder.create();
+
+
+                    String jsonAdsLastUdpate = gson.toJson(adArrayList);
+
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString(this.LOCAL_ADS_KEY,""); // flush it first
+                    editor.putString(this.LOCAL_ADS_KEY,jsonAdsLastUdpate);
+                    editor.apply();
+
+
+                    // Commit the edits!
+
+                    // apply() changes the in-memory SharedPreferences object immediately but writes the updates to disk asynchronously.
+                    //Alternatively, you can use commit() to write the data to disk synchronously.
+                    //  But because commit() is synchronous, you should avoid calling it from your main thread because it could
+                    //pause your UI rendering.
+                    //editor.commit();
+                }
+
+            }
+        }
+
+
+    }
+
+    public boolean readAdsLocally()
+    {
+        // Loading Data, show loading animation while loading...
+        utilities.loadingAnimation(View.VISIBLE,"foldingCube",getActivity(),R.id.spin_kit_ads);
+
+        List<Ad> adsList = new ArrayList<>();
+
+        // Restore preferences
+        SharedPreferences settings = getActivity().getSharedPreferences( this.LOCAL_ADS_KEY, 0);
+
+        if(settings != null)
+        {
+            //if some preference does not exist returns NOT OK - NOK
+            Gson gson = new Gson();
+            String jsonAdsUdpate = settings.getString(this.LOCAL_ADS_KEY, "NOK");
+
+            if(!jsonAdsUdpate.equals("NOK") && jsonAdsUdpate != null)
+            {
+                adsList =  Arrays.asList(gson.fromJson(jsonAdsUdpate, Ad[].class));
+
+                adArrayList.clear();
+                adArrayList = new ArrayList<>(adsList);
+
+                if(adArrayList != null)
+                {
+                    if(adArrayList.size() > 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+        }
+
+        return false;
+
+    }
+
+    public void removeAdLocally(Ad adToRemove)
+    {
+        if(adToRemove != null)
+        {
+            if(isAdLocallySaved(adToRemove))
+            {
+                int idx = getAdIndex(adToRemove);
+                if(idx >= 0)
+                {
+                    adArrayList.remove(idx);
+                    this.saveAdsLocally();
+
+                }
+
+            }
+        }
+    }
+
+    public boolean isAdLocallySaved(Ad ad)
+    {
+        if(ad != null && adArrayList.size() > 0)
+        {
+            for (Ad mAd : adArrayList)
+            {
+                if(mAd != null)
+                {
+                    if(ad.getTitle().equals(mAd.getTitle()) && ad.getId().equals(mAd.getId()))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public int getAdIndex(Ad ad)
+    {
+
+        if(ad != null && adArrayList.size() > 0)
+        {
+            for(int idx = 0; idx < adArrayList.size(); idx++)
+            {
+                if(adArrayList.get(idx).getId().equals(ad.getId()))
+                {
+                    return idx;
+                }
+            }
+
+        }
+
+        return -1;
+    }
+
+    public void updateScreen()
+    {
+
+            Collections.sort(adArrayList, new AdsFragment.AdComparator());
+
+            mAdapter = new AdsAdapter(adArrayList);
+
+            recyclerView.setAdapter(mAdapter);
+
+
+        utilities.loadingAnimation(View.GONE,"foldingCube",getActivity(),R.id.spin_kit_ads);
+        //remove background
+        LinearLayout imgBackg = (LinearLayout) getActivity().findViewById(R.id.mybackgAd);
+        imgBackg.setVisibility(View.GONE);
+
+    }
+
+    public void loadData()
+    {
+        if(!readAdsLocally())
+        {
+            loadDataFromDB();
+
+           // Log.wtf("LOAD","CLOUDY");
+        }
+
+
+        //Data Listners for change
+        onDataAddedUpdateList();
+        onDataChangedUpdateList();
+        onDataRemovedUpdateList();
+
+       // Log.wtf("LOAD","LOCALLY");
+
+        updateScreen();
+
+    }
+
+    public void loadDataFromDB()
+    {
+        ref.addChildEventListener(
+                new ChildEventListener()
+                {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
+                    {
+                        //Log.d("TAG", "Key:" + dataSnapshot.getKey());
+                        //Log.d("TAG", "Value:" + dataSnapshot.getValue());
+
+                        // A new comment has been added, add it to the displayed list
+
+                        try {
+
+
+                            if(dataSnapshot.getValue(Ad.class) != null)
+                            {
+                                Ad ad = dataSnapshot.getValue(Ad.class);
+
+                                if(ad != null)
+                                {
+
+                                    if(ad.getState().equals("ON"))
+                                    {
+                                        addAdList(ad);
+                                        saveAdsLocally();
+                                    }
+
+                                    //Log.wtf("Ad",ad.getTitle());
+                                }
+
+                            }
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                        // ...
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName)
+                    {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w("TAG", "postComments:onCancelled", databaseError.toException());
+                        Toast.makeText(mContext, "Failed to load comments.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
 
  }

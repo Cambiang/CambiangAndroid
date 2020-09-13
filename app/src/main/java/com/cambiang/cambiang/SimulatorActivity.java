@@ -34,6 +34,9 @@ public class SimulatorActivity extends AppCompatActivity
         if (getIntent().hasExtra(this.KEY_EXTRA))
         {
             this.senderTabPosition = getIntent().getStringExtra(this.KEY_EXTRA);
+
+            //Clear the Intent After use it
+            getIntent().removeExtra(this.KEY_EXTRA);
         }
         else
         {

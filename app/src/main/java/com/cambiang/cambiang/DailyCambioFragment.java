@@ -208,10 +208,13 @@ public class DailyCambioFragment extends Fragment {
         this.OrderCentralComercialInformalBanks();
 
         //Check for udpated from DB if not just display old values
-        checkCambiosUpdates();
+        //checkCambiosUpdates();
 
-        //Update banks
-        banksArraySharedPreferences();
+        //Check if dates is changed on pilot Banks then loadData
+        checkAndUpdateIfConfirmedNewUpdates("CambiosLastUpdates");
+        checkAndUpdateIfConfirmedNewUpdatesInformal("CambiosLastUpdates");
+
+
     }
 
 
@@ -469,15 +472,22 @@ public class DailyCambioFragment extends Fragment {
             {
                 for(int i = 0; i < this.banksArray.size(); i++)
                 {
-                    if(this.banksArray.get(i).getName().equals("BNA"))
+                    if(this.banksArray.get(i) != null)
                     {
-                        BNAidx = i;
+                        if(this.banksArray.get(i).getName() != null)
+                        {
+                            if(this.banksArray.get(i).getName().equals("BNA"))
+                            {
+                                BNAidx = i;
+                            }
+
+                            if(this.banksArray.get(i).getName().equals("KINGUILAS"))
+                            {
+                                KINGUILASidx = i;
+                            }
+                        }
                     }
 
-                    if(this.banksArray.get(i).getName().equals("KINGUILAS"))
-                    {
-                        KINGUILASidx = i;
-                    }
                 }
 
 
@@ -1050,8 +1060,6 @@ public class DailyCambioFragment extends Fragment {
 
         return super.onContextItemSelected(item);
     }
-
-
 
 
     public void showJuros(int position)
@@ -1877,8 +1885,147 @@ public class DailyCambioFragment extends Fragment {
 
     }
     */
-     
 
+    public void checkAndUpdateIfConfirmedNewUpdates(String dbPath)
+    {
+        final Boolean[] isNotSameDate = {false};
+
+        DatabaseReference refUpdates = FirebaseDatabase.getInstance().getReference(dbPath);
+
+        for (String pilotBank : this.utilities.PILOTBANKS)
+        {
+            //print("pilot banks: \(pilotBank)")
+            //observing the data changes
+
+            refUpdates.child(pilotBank).child("refDate").addValueEventListener(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                {
+                    String refDate = dataSnapshot.getValue(String.class);
+                    if(refDate != null)
+                    {
+                        if (!refDate.equals(getDateOfCambioByBankLocally(pilotBank)))
+                        {
+                            //Log.wtf("DATE NS",refDate + " -- " + getDateOfCambioByBankLocally(pilotBank));
+
+                            //Just load once, before confirmation isNotSame is put in TRUE
+                            if(!isNotSameDate[0])
+                            {
+                                //Load Cambios
+                                loadDataFromDB();
+
+                                //Update banks
+                                banksArraySharedPreferences();
+                            }
+
+                            isNotSameDate[0] = true;
+
+                        }
+                      //  Log.wtf("DATE S",refDate + " -- " + getDateOfCambioByBankLocally(pilotBank));
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError)
+                {
+
+                }
+            });
+
+
+            if (isNotSameDate[0])
+            {
+               // Log.wtf("DATE NS", "BREAKING LOOP");
+
+                //If is not the same date, meaning update was requested by loadDataFromDB so it can break the loop
+                break;
+            }
+
+        }
+    }
+
+    public void checkAndUpdateIfConfirmedNewUpdatesInformal(String dbPath)
+    {
+        final Boolean[] isNotSameDate = {false};
+
+        DatabaseReference refUpdates = FirebaseDatabase.getInstance().getReference(dbPath);
+        String pilotBank = "KINGUILAS";
+            //print("pilot banks: \(pilotBank)")
+            //observing the data changes
+
+            refUpdates.child(pilotBank).child("refDate").addValueEventListener(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                {
+                    String refDate = dataSnapshot.getValue(String.class);
+                    if(refDate != null)
+                    {
+                        if (!refDate.equals(getDateOfCambioByBankLocally(pilotBank)))
+                        {
+                           // Log.wtf("DATE INFORMAL NS",refDate + " -- " + getDateOfCambioByBankLocally(pilotBank));
+
+                            if(!isNotSameDate[0])
+                            {
+                                //Load Cambios
+                                loadDataFromDB();
+
+                                //Update banks
+                                ///banksArraySharedPreferences();
+                            }
+
+                            isNotSameDate[0] = true;
+
+                        }
+                        //Log.wtf("DATE INFORMAL S",refDate + " -- " + getDateOfCambioByBankLocally(pilotBank));
+
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError)
+                {
+
+                }
+            });
+
+
+    }
+
+
+    public String getDateOfCambioByBankLocally(String bankName)
+    {
+        String ret = "00-00-0000";
+
+        if(cambiosLastUpdate != null)
+        if (cambiosLastUpdate.size() > 0)
+        {
+            for(Cambio cambio : cambiosLastUpdate)
+            {
+
+                if (cambio.getId() != null)
+                {
+                    if(cambio.getBank().equals(bankName))
+                    {
+                        ret = cambio.getRefDate();
+                    }
+                }
+
+            }
+        }
+        //ret = "00/00/0000"
+
+        return ret;
+    }
+
+
+    public void loadDataFromDB()
+    {
+        manager();
+    }
     
 }
 

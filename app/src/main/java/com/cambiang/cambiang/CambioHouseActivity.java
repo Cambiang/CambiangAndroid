@@ -53,6 +53,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -90,13 +91,14 @@ public class CambioHouseActivity extends AppCompatActivity {
     public static final String GOOGLE_TRACK_ID ="UA-132922035-1";
 
 
-    public static final String PREFS_NAME = "cambiosCambioHouseLastUpdates";
+    public static final String CAMBIO_HOUSE_PREFS = "CAMBIO_HOUSE_PREFS";
+    public static final String CAMBIO_HOUSE_LAST_UPDATES = "CAMBIO_HOUSE_LAST_UPDATES";
+    public static final String CAMBIO_HOUSES = "CAMBIO_HOUSES";
 
     //For GMob Ads
     String gMobAdsAtCambioHouseState = "OFF";
     String gMobAdsAtCambioHouseType = "BANNER";
     LinearLayout adLayout;
-    SharedPreferences settings;
 
     String senderTabPosition = "0";
     String KEY_EXTRA = "fragment";
@@ -116,10 +118,7 @@ public class CambioHouseActivity extends AppCompatActivity {
 
         //init Ad view
         adLayout = new LinearLayout(this.getApplicationContext());
-
-        settings = getSharedPreferences(PREFS_NAME, 0);
-
-
+        
         cambiosLastUpdate = new ArrayList<Cambio>(0);
         cambiosPrevious = new ArrayList<Cambio>(0);
         cambioHousesArray = new ArrayList<Bank>();
@@ -162,6 +161,9 @@ public class CambioHouseActivity extends AppCompatActivity {
         if (getIntent().hasExtra(this.KEY_EXTRA))
         {
             this.senderTabPosition = getIntent().getStringExtra(this.KEY_EXTRA);
+
+            //Clear the Intent After use it
+            getIntent().removeExtra(this.KEY_EXTRA);
         }
         else
         {
@@ -175,9 +177,8 @@ public class CambioHouseActivity extends AppCompatActivity {
     {
         if(restoreSharedPreferences())
         {
-             //Log.wtf("Shared Pref","IM HERE MAN");
-            //Get all previously stored Cambios and Bank sarrays from Shared Preference
-            getCambiosFromSharedPreferences("EUR");
+            //Get all previously stored Cambios and Bank arrays from Shared Preference
+            loadDataOffline();
         }else
         {
             //Probably this methods will never be executed, because at this stage it is expected some stored Cambios on the SharedPreferences
@@ -225,10 +226,10 @@ public class CambioHouseActivity extends AppCompatActivity {
 
                                                                 if(cambio.getBank().equals(cambioHouse.getName()))
                                                                 {
-                                                                    addCambioList(cambio, cambioHouse);
+                                                                    if(!isCambioInTheList(cambio))
+                                                                        addCambioList(cambio, cambioHouse);
 
                                                                 }
-
 
                                                         }
 
@@ -300,7 +301,10 @@ public class CambioHouseActivity extends AppCompatActivity {
                                                 Bank cambioHouse = dataSnapshot.getValue(Bank.class);
 
                                                     if(cambio.getBank().equals(cambioHouse.getName()))
+                                                    {
                                                         updateList(cambio, cambioHouse);
+                                                    }
+
 
                                             }
 
@@ -413,7 +417,6 @@ public class CambioHouseActivity extends AppCompatActivity {
                                     Cambio cambioPrevious = dataSnapshot.getValue(Cambio.class);
 
                                     addAlsoChangingRate(cambio, cambioPrevious, cambioHouse);
-
                                 }
                             }catch (Exception e)
                             {
@@ -451,154 +454,18 @@ public class CambioHouseActivity extends AppCompatActivity {
 
     }
 
-
-    public void addAlsoChangingRate(Cambio cambio, Cambio cambioPrevious, Bank cambioHouse)
+    public Boolean isCambioInTheList(Cambio cambio)
     {
-        // Log.wtf("ChangingRate", cambio.getBank() + "--" + cambioPrevious.getBank());
-
-        if(cambio != null && cambioPrevious != null)
+        if(arrayListsAreGoodToGo() && cambio != null)
         {
-            if(cambio.getBank().equals(cambioPrevious.getBank()))
-            {
-                Double usdChangeRate = utilities.roundWithDecimalPlaces ((1.0 - Double.parseDouble(cambio.getUsdValue())/Double.parseDouble(cambioPrevious.getUsdValue()))*100,1);
-                Double euroChangeRate = utilities.roundWithDecimalPlaces (  (1.0 - Double.parseDouble(cambio.getEuroValue())/Double.parseDouble(cambioPrevious.getEuroValue()))*100,1);
-
-                Double usdChangeRateBuying = utilities.roundWithDecimalPlaces ((-1.0 + Double.parseDouble(cambio.getUsdValueBuying())/Double.parseDouble(cambioPrevious.getUsdValueBuying()))*100,1);
-                Double euroChangeRateBuying = utilities.roundWithDecimalPlaces (  (-1.0 + Double.parseDouble(cambio.getEuroValueBuying())/Double.parseDouble(cambioPrevious.getEuroValueBuying()))*100,1);
-
-
-                cambio.setUsdArrowType(null);
-                cambio.setEuroArrowType(null);
-
-                if(usdChangeRate > 0)
-                {
-                    cambio.setUsdArrowType("down");
-                }else
-                {
-                    if(usdChangeRate < 0)
-                    {
-                        cambio.setUsdArrowType("up");
-                    }else
-                    {
-                        if(usdChangeRate == 0)
-                        {
-                            cambio.setUsdArrowType("flat");
-                        }
-                    }
-                }
-
-                if(euroChangeRate > 0)
-                {
-                    cambio.setEuroArrowType("down");
-                }else
-                {
-                    if(euroChangeRate < 0)
-                    {
-                        cambio.setEuroArrowType("up");
-                    }else
-                    {
-                        if(euroChangeRate == 0)
-                        {
-                            cambio.setEuroArrowType("flat");
-                        }
-                    }
-                }
-
-                //Buying Values
-                if(usdChangeRateBuying > 0)
-                {
-                    cambio.setUsdArrowTypeBuying("up");
-                }else
-                {
-                    if(usdChangeRateBuying < 0)
-                    {
-                        cambio.setUsdArrowTypeBuying("down");
-                    }else
-                    {
-                        if(usdChangeRateBuying == 0)
-                        {
-                            cambio.setUsdArrowTypeBuying("flat");
-                        }
-                    }
-                }
-
-                if(euroChangeRateBuying > 0)
-                {
-                    cambio.setEuroArrowTypeBuying("up");
-                }else
-                {
-                    if(euroChangeRateBuying < 0)
-                    {
-                        cambio.setEuroArrowTypeBuying("down");
-                    }else
-                    {
-                        if(euroChangeRateBuying == 0)
-                        {
-                            cambio.setEuroArrowTypeBuying("flat");
-                        }
-                    }
-                }
-
-                // use modulus abs to remove minus sign
-                usdChangeRate = Math.abs(usdChangeRate);
-                euroChangeRate = Math.abs(euroChangeRate);
-                usdChangeRateBuying = Math.abs(usdChangeRateBuying);
-                euroChangeRateBuying = Math.abs(euroChangeRateBuying);
-
-                String usdChangeRateStr = Double.toString (usdChangeRate) + "%";
-                String euroChangeRateStr = Double.toString (euroChangeRate) + "%";
-                String usdChangeRateStrBuying = Double.toString (usdChangeRateBuying) + "%";
-                String euroChangeRateStrBuying = Double.toString (euroChangeRateBuying) + "%";
-                //Log.wtf("ChangingRate", cambio.getBank() + "--" + cambioPrevious.getBank() +">>" + usdChangeRateStr);
-
-
-                // usdChangeRateStr = usdChangeRateStr.substring(0,3) + "%"; // to limit the charaters
-                // euroChangeRateStr = euroChangeRateStr.substring(0,3) + "%"; // to limit the charaters
-
-                // Log.wtf("ChangingRate", cambio.getBank() + "--" + cambioPrevious.getBank() +">><<" + usdChangeRateStr + "--" + euroChangeRateStr);
-
-                cambio.setUsdChangeRate(usdChangeRateStr);
-                cambio.setEuroChangeRate(euroChangeRateStr);
-                cambio.setUsdChangeRateBuying(usdChangeRateStrBuying);
-                cambio.setEuroChangeRateBuying(euroChangeRateStrBuying);
-
-                //Add Previous Cambio
-                cambio.setUsdValuePrev(cambioPrevious.getUsdValue());
-                cambio.setEuroValuePrev(cambioPrevious.getEuroValue());
-                cambio.setUsdValueBuyingPrev(cambioPrevious.getUsdValueBuying());
-                cambio.setEuroValueBuyingPrev(cambioPrevious.getEuroValueBuying());
-
-                //Log.wtf("getEuroValuePrev-1",cambioPrevious.getUsdValuePrev());
-
-
-                // Add cambioHouse to List
-                    this.cambioHousesArray.add(cambioHouse);
-
-                //Add Cambio to List
-                    this.cambiosLastUpdate.add(cambio);
-
-                //Order Array CambiosLastUpdate
-                //this.OrderCentralComercialInformalBanks();
-
-                //Sort Cambio by the Lower one
-                this.sortByLowerCambioEUR();
-
-
-                mAdapter = new DataCambioHouseAdapter(cambiosLastUpdate, cambioHousesArray);
-
-                recyclerView.setAdapter(mAdapter);
-
-                utilities.loadingAnimation(View.GONE,"chasingDots",this,R.id.cambio_house_spin_kit);
-
-                //remove background
-                LinearLayout imgBackg = (LinearLayout) findViewById(R.id.cambio_house_mybackg);
-                imgBackg.setVisibility(View.GONE);
-
-            }
+            if(cambiosLastUpdate.contains(cambio))
+                return true;
         }
 
 
+        return false;
     }
+
 
     public void updateList(final Cambio cambio, Bank cambioHouse)
     {
@@ -760,6 +627,10 @@ public class CambioHouseActivity extends AppCompatActivity {
 
             }
         }
+
+
+        //Store Data
+        storeCambiosCambioHouseSharedPref();
 
     }
 
@@ -1005,45 +876,6 @@ public class CambioHouseActivity extends AppCompatActivity {
     }
 
 
-    public boolean restoreSharedPreferences()
-    {
-        // Restore preferences
-        List<Cambio> cambiosList = new ArrayList<>();
-        List<Bank> cambioHousesList = new ArrayList<>();
-
-        if(settings != null)
-        {
-            //if some preference does not exist returns NOT OK - NOK
-            Gson gson = new Gson();
-            String jsonCambiosLastUdpate = settings.getString("cambiosCambiosHouseLastUpdate", "NOK");
-            String jsonBanksArray = settings.getString("cambioHousesArray", "NOK");
-
-            if(!jsonCambiosLastUdpate.equals("NOK") && jsonCambiosLastUdpate != null &&
-                    !jsonBanksArray.equals("NOK") && jsonBanksArray != null)
-            {
-
-                cambiosList =  Arrays.asList(gson.fromJson(jsonCambiosLastUdpate, Cambio[].class));
-                cambioHousesList = Arrays.asList(gson.fromJson(jsonBanksArray, Bank[].class));
-
-                cambiosLastUpdate = new ArrayList<>(cambiosList);
-                cambioHousesArray = new ArrayList<>(cambioHousesList);
-
-                if(cambiosLastUpdate != null && cambioHousesArray != null)
-                {
-                    if(cambiosLastUpdate.size() > 0 && cambioHousesArray.size() > 0)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-        }
-
-        return false;
-
-    }
-
-
     public void getCambiosFromSharedPreferences(String typeOfCurrency)
     {
 
@@ -1079,6 +911,365 @@ public class CambioHouseActivity extends AppCompatActivity {
 
         }
     }
+
+    public void loadDataOffline()
+    {
+        //Log.wtf("OFFLINE","LOAD");
+
+        getCambiosFromSharedPreferences("EUR");
+
+        checkAndUpdateIfConfirmedNewUpdates("CambioHouseLastUpdates");
+    }
+
+    public void checkAndUpdateIfConfirmedNewUpdates(String dbPath)
+    {
+        final Boolean[] isNotSameDate = {false};
+
+        DatabaseReference refUpdates = FirebaseDatabase.getInstance().getReference(dbPath);
+
+        for (String pilotBank : this.utilities.PILOTCAMBIOHOUSES)
+        {
+            //print("pilot banks: \(pilotBank)")
+            //observing the data changes
+
+            refUpdates.child(pilotBank).child("refDate").addValueEventListener(new ValueEventListener()
+            {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                {
+                    String refDate = dataSnapshot.getValue(String.class);
+                    if(refDate != null)
+                    {
+                        if (!refDate.equals(getDateOfCambioByBankLocally(pilotBank)))
+                        {
+                           // Log.wtf("DATE NS",refDate + " -- " + getDateOfCambioByBankLocally(pilotBank));
+
+                            //Just load once, before confirmation isNotSame is put in TRUE
+                            if(!isNotSameDate[0])
+                            {
+                                //Load Cambios
+                                loadDataFromDB();
+
+                            }
+
+                            isNotSameDate[0] = true;
+
+                        }
+                         // Log.wtf("DATE S",refDate + " -- " + getDateOfCambioByBankLocally(pilotBank));
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError)
+                {
+
+                }
+            });
+
+
+            if (isNotSameDate[0])
+            {
+                // Log.wtf("DATE NS", "BREAKING LOOP");
+
+                //If is not the same date, meaning update was requested by loadDataFromDB so it can break the loop
+                break;
+            }
+
+        }
+    }
+
+    public String getDateOfCambioByBankLocally(String bankName)
+    {
+        String ret = "00-00-0000";
+
+        if(cambiosLastUpdate != null)
+            if (cambiosLastUpdate.size() > 0)
+            {
+                for(Cambio cambio : cambiosLastUpdate)
+                {
+
+                    if (cambio.getId() != null)
+                    {
+                        if(cambio.getBank().equals(bankName))
+                        {
+                            ret = cambio.getRefDate();
+                        }
+                    }
+
+                }
+            }
+        //ret = "00/00/0000"
+
+        return ret;
+    }
+
+
+    public void loadDataFromDB()
+    {
+        manager();
+    }
+
+
+    public void storeCambiosCambioHouseSharedPref()
+    {
+        SharedPreferences settingsCambioHouse = getSharedPreferences(CAMBIO_HOUSE_PREFS, 0);
+
+        if(cambiosLastUpdate != null)
+        {
+            if(cambiosLastUpdate.size() > 0 )
+            {
+
+                //Set the values
+                if(settingsCambioHouse != null)
+                {
+                    GsonBuilder gsonBuilder = new GsonBuilder();
+                    Gson gson = gsonBuilder.create();
+
+                    String jsonCambiosLastUdpate = gson.toJson(cambiosLastUpdate);
+
+                    SharedPreferences.Editor editor = settingsCambioHouse.edit();
+                    editor.putString("",jsonCambiosLastUdpate); //flush it first
+                    editor.putString(CAMBIO_HOUSE_LAST_UPDATES,jsonCambiosLastUdpate);
+
+                    // Commit the edits!
+                    editor.commit();
+                }
+
+            }
+        }
+
+        if(cambioHousesArray != null)
+        {
+            if(cambioHousesArray.size() > 0)
+            {
+                if(settingsCambioHouse != null)
+                {
+                    //Set the values
+                    GsonBuilder gsonBuilder = new GsonBuilder();
+                    Gson gson = gsonBuilder.create();
+
+                    String jsonBanksArray = gson.toJson(cambioHousesArray);
+
+                    SharedPreferences.Editor editor = settingsCambioHouse.edit();
+                    editor.putString("",jsonBanksArray);
+                    editor.putString(CAMBIO_HOUSES,jsonBanksArray);
+
+                    // Commit the edits!
+                    editor.commit();
+                }
+
+            }
+        }
+    }
+
+    public boolean restoreSharedPreferences()
+    {
+        // Restore preferences
+        List<Cambio> cambiosList = new ArrayList<>();
+        List<Bank> cambioHousesList = new ArrayList<>();
+        SharedPreferences settings = getSharedPreferences(CAMBIO_HOUSE_PREFS, 0);
+
+        if(settings != null)
+        {
+            //if some preference does not exist returns NOT OK - NOK
+            Gson gson = new Gson();
+            String jsonCambiosLastUdpate = settings.getString(CAMBIO_HOUSE_LAST_UPDATES, "NOK");
+            String jsonBanksArray = settings.getString(CAMBIO_HOUSES, "NOK");
+
+            if(!jsonCambiosLastUdpate.equals("NOK") && jsonCambiosLastUdpate != null &&
+                    !jsonBanksArray.equals("NOK") && jsonBanksArray != null)
+            {
+
+                cambiosList =  Arrays.asList(gson.fromJson(jsonCambiosLastUdpate, Cambio[].class));
+                cambioHousesList = Arrays.asList(gson.fromJson(jsonBanksArray, Bank[].class));
+
+                cambiosLastUpdate.clear();
+                cambioHousesArray.clear();
+                cambiosLastUpdate = new ArrayList<>(cambiosList);
+                cambioHousesArray = new ArrayList<>(cambioHousesList);
+
+                if(cambiosLastUpdate != null && cambioHousesArray != null)
+                {
+                    if(cambiosLastUpdate.size() > 0 && cambioHousesArray.size() > 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+        }
+
+        return false;
+
+    }
+
+
+    public void addAlsoChangingRate(Cambio cambio, Cambio cambioPrevious, Bank cambioHouse)
+    {
+        // Log.wtf("ChangingRate", cambio.getBank() + "--" + cambioPrevious.getBank());
+
+        if(cambio != null && cambioPrevious != null)
+        {
+            if(cambio.getBank().equals(cambioPrevious.getBank()))
+            {
+                Double usdChangeRate = utilities.roundWithDecimalPlaces ((1.0 - Double.parseDouble(cambio.getUsdValue())/Double.parseDouble(cambioPrevious.getUsdValue()))*100,1);
+                Double euroChangeRate = utilities.roundWithDecimalPlaces (  (1.0 - Double.parseDouble(cambio.getEuroValue())/Double.parseDouble(cambioPrevious.getEuroValue()))*100,1);
+
+                Double usdChangeRateBuying = utilities.roundWithDecimalPlaces ((-1.0 + Double.parseDouble(cambio.getUsdValueBuying())/Double.parseDouble(cambioPrevious.getUsdValueBuying()))*100,1);
+                Double euroChangeRateBuying = utilities.roundWithDecimalPlaces (  (-1.0 + Double.parseDouble(cambio.getEuroValueBuying())/Double.parseDouble(cambioPrevious.getEuroValueBuying()))*100,1);
+
+
+                cambio.setUsdArrowType(null);
+                cambio.setEuroArrowType(null);
+
+                if(usdChangeRate > 0)
+                {
+                    cambio.setUsdArrowType("down");
+                }else
+                {
+                    if(usdChangeRate < 0)
+                    {
+                        cambio.setUsdArrowType("up");
+                    }else
+                    {
+                        if(usdChangeRate == 0)
+                        {
+                            cambio.setUsdArrowType("flat");
+                        }
+                    }
+                }
+
+                if(euroChangeRate > 0)
+                {
+                    cambio.setEuroArrowType("down");
+                }else
+                {
+                    if(euroChangeRate < 0)
+                    {
+                        cambio.setEuroArrowType("up");
+                    }else
+                    {
+                        if(euroChangeRate == 0)
+                        {
+                            cambio.setEuroArrowType("flat");
+                        }
+                    }
+                }
+
+                //Buying Values
+                if(usdChangeRateBuying > 0)
+                {
+                    cambio.setUsdArrowTypeBuying("up");
+                }else
+                {
+                    if(usdChangeRateBuying < 0)
+                    {
+                        cambio.setUsdArrowTypeBuying("down");
+                    }else
+                    {
+                        if(usdChangeRateBuying == 0)
+                        {
+                            cambio.setUsdArrowTypeBuying("flat");
+                        }
+                    }
+                }
+
+                if(euroChangeRateBuying > 0)
+                {
+                    cambio.setEuroArrowTypeBuying("up");
+                }else
+                {
+                    if(euroChangeRateBuying < 0)
+                    {
+                        cambio.setEuroArrowTypeBuying("down");
+                    }else
+                    {
+                        if(euroChangeRateBuying == 0)
+                        {
+                            cambio.setEuroArrowTypeBuying("flat");
+                        }
+                    }
+                }
+
+                // use modulus abs to remove minus sign
+                usdChangeRate = Math.abs(usdChangeRate);
+                euroChangeRate = Math.abs(euroChangeRate);
+                usdChangeRateBuying = Math.abs(usdChangeRateBuying);
+                euroChangeRateBuying = Math.abs(euroChangeRateBuying);
+
+                String usdChangeRateStr = Double.toString (usdChangeRate) + "%";
+                String euroChangeRateStr = Double.toString (euroChangeRate) + "%";
+                String usdChangeRateStrBuying = Double.toString (usdChangeRateBuying) + "%";
+                String euroChangeRateStrBuying = Double.toString (euroChangeRateBuying) + "%";
+                //Log.wtf("ChangingRate", cambio.getBank() + "--" + cambioPrevious.getBank() +">>" + usdChangeRateStr);
+
+
+                // usdChangeRateStr = usdChangeRateStr.substring(0,3) + "%"; // to limit the charaters
+                // euroChangeRateStr = euroChangeRateStr.substring(0,3) + "%"; // to limit the charaters
+
+                // Log.wtf("ChangingRate", cambio.getBank() + "--" + cambioPrevious.getBank() +">><<" + usdChangeRateStr + "--" + euroChangeRateStr);
+
+                cambio.setUsdChangeRate(usdChangeRateStr);
+                cambio.setEuroChangeRate(euroChangeRateStr);
+                cambio.setUsdChangeRateBuying(usdChangeRateStrBuying);
+                cambio.setEuroChangeRateBuying(euroChangeRateStrBuying);
+
+                //Add Previous Cambio
+                cambio.setUsdValuePrev(cambioPrevious.getUsdValue());
+                cambio.setEuroValuePrev(cambioPrevious.getEuroValue());
+                cambio.setUsdValueBuyingPrev(cambioPrevious.getUsdValueBuying());
+                cambio.setEuroValueBuyingPrev(cambioPrevious.getEuroValueBuying());
+
+                //Log.wtf("getEuroValuePrev-1",cambioPrevious.getUsdValuePrev());
+
+
+                // Add cambioHouse to List
+                this.cambioHousesArray.add(cambioHouse);
+
+                //Add Cambio to List
+                this.cambiosLastUpdate.add(cambio);
+
+                //Order Array CambiosLastUpdate
+                //this.OrderCentralComercialInformalBanks();
+
+                //Sort Cambio by the Lower one
+                this.sortByLowerCambioEUR();
+
+
+                mAdapter = new DataCambioHouseAdapter(cambiosLastUpdate, cambioHousesArray);
+
+                recyclerView.setAdapter(mAdapter);
+
+                utilities.loadingAnimation(View.GONE,"chasingDots",this,R.id.cambio_house_spin_kit);
+
+                //remove background
+                LinearLayout imgBackg = (LinearLayout) findViewById(R.id.cambio_house_mybackg);
+                imgBackg.setVisibility(View.GONE);
+
+
+                //Store data
+                storeCambiosCambioHouseSharedPref();
+
+
+            }
+        }
+
+
+    }
+
+
+    public Boolean arrayListsAreGoodToGo()
+    {
+        if(cambiosLastUpdate != null && cambioHousesArray != null)
+        {
+            if(cambiosLastUpdate.size() > 0 && cambioHousesArray.size() > 0)
+                return true;
+        }
+
+        return false;
+    }
+
 
 
 }

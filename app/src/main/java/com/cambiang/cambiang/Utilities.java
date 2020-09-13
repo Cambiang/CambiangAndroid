@@ -60,7 +60,8 @@ public class Utilities {
 
     public void Utilities(){}
 
-
+    public String[] PILOTBANKS = {"ATL","BFA","BAI","BIC","BSOL"}; //used to check for DB updates
+    public String[] PILOTCAMBIOHOUSES = {"MLC","TAMC","MASC","SUKC","VSC"}; //used to check for DB updates
 
     synchronized public void getDefaultTracker(Context context)
     {
@@ -109,36 +110,36 @@ public class Utilities {
         LinearLayout layout = new LinearLayout(activity.getApplicationContext());
 
         // add AdMob
-        if(activity != null && adSize != null)
+        if(activity != null && adSize != null && layout != null)
         {
             /*  UNCOMMMENT THIS METHOD BEFORE GENERATE APP BUNDLE FOR RELEASE */
 
-
             AdView adView = new AdView(activity.getApplicationContext());
 
+            if(adView != null)
+            {
+                // adView.setAdUnitId(adRealId); //reall ID
 
-           // adView.setAdUnitId(adRealId); //reall ID
-
-            adView.setAdUnitId(adTestId); // Test ID
-            adView.setAdSize(adSize);
-            adView.setId(adID);
+                adView.setAdUnitId(adTestId); // Test ID
+                adView.setAdSize(adSize);
+                adView.setId(adID);
 
 
-            LinearLayout.LayoutParams adLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            adView.setLayoutParams(adLayoutParams);
-            // 広告表示位置は画面下部
-            layout.addView(adView);
-            layout.setPadding(0,0,0,bottomPadding);
-            layout.setGravity(Gravity.BOTTOM);
-            layout.setVisibility(visibility);
+                LinearLayout.LayoutParams adLayoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                adView.setLayoutParams(adLayoutParams);
+                // 広告表示位置は画面下部
+                layout.addView(adView);
+                layout.setPadding(0,0,0,bottomPadding);
+                layout.setGravity(Gravity.BOTTOM);
+                layout.setVisibility(visibility);
 
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            activity.addContentView(layout, layoutParams);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                activity.addContentView(layout, layoutParams);
 
-            // load ad
-            AdRequest adRequest = new AdRequest.Builder().build();
-            adView.loadAd(adRequest);
-
+                // load ad
+                AdRequest adRequest = new AdRequest.Builder().build();
+                adView.loadAd(adRequest);
+            }
         }
 
         return layout;
@@ -227,6 +228,18 @@ public class Utilities {
         //Log.wtf("date",formattedDate);
         return formattedDate;
     }
+
+    public String getDateDayMonthYear()
+    {
+        Date calendar = Calendar.getInstance().getTime();
+
+        String formattedDate = new SimpleDateFormat("dd-MM-yyyy").format(calendar);
+
+        //Log.wtf("date",formattedDate);
+        return formattedDate;
+    }
+
+
 
     public Double getArrayDoublesMin(ArrayList<Double> arrayDoubs)
     {
@@ -518,13 +531,135 @@ public class Utilities {
         {
             if(!str.isEmpty())
             {
-                return Double.parseDouble(str);
+                Double ret = Double.parseDouble(str);
+                if(ret != null)
+                {
+                    return ret;
+
+                }else
+                    {
+                        return 0.0;
+                    }
+
             }
         }
 
         return 0.0;
     }
 
+    /*
+    ORIGINAL METHOD
+     */
+    /*
+    public Double stringToDouble(String str)
+    {
+        if(str != null)
+        {
+            if(!str.isEmpty())
+            {
+                return Double.parseDouble(str);
+
+            }
+        }
+
+        return 0.0;
+    }
+
+/*
+    public Double stringToDouble(String str)
+    {
+        if(str != null)
+        {
+            if(!str.isEmpty())
+            {
+                if(str.matches("[0-9]+")) //Added this to check if the String only have numbers in it
+                {
+                    return Double.parseDouble(str);
+                }
+            }
+        }
+
+        return 0.0;
+    }
+
+ */
+
+
+
+    public void saveSingleValueData(String value, String key, Activity activity)
+    {
+        if(value != null && key != null && activity != null)
+        {
+            SharedPreferences settings = activity.getSharedPreferences(key, 0);
+            //Set the values
+            if(settings != null)
+            {
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString(key,""); // flush it first
+                editor.putString(key,value);
+                editor.apply();
+            }
+
+        }
+
+
+    }
+
+
+    public String readSingleValueData(String key, Activity activity)
+    {
+        if(key != null && activity != null)
+        {
+            SharedPreferences settings = activity.getSharedPreferences(key, 0);
+            //Set the values
+            if(settings != null)
+            {
+                return settings.getString(key, "NOK");
+            }
+
+        }
+
+        return "NOK";
+
+    }
+
+
+    public Boolean isTheSameMonth(String key, Activity activity)
+    {
+
+        String monthStr = this.getThisMonth();
+
+        String lastMonth = this.readSingleValueData(key, activity);
+
+        if(monthStr != null && lastMonth != null)
+        {
+            if (lastMonth.isEmpty() || lastMonth.equals("NOK"))
+            {
+                this.saveSingleValueData(monthStr,key,activity);
+
+                //Log.wtf("MONTH",monthStr + " : " + lastMonth);
+
+            }else
+            {
+                if (!lastMonth.equals(monthStr))
+                {
+                    //Not the same Month found saved locally
+                    this.saveSingleValueData(monthStr,key,activity);
+
+                    return false;
+                }else
+                {
+                    //Log.wtf("MONTH 2",monthStr + " : " + lastMonth);
+
+                    //Same date found saved locally
+                    return true;
+                }
+            }
+        }
+
+        return true;
+
+    }
 
 
 
